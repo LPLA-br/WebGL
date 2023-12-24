@@ -30,5 +30,20 @@
     <li>  </li>
 </ul>
 
+## Execução do projeto em seu estado atual
+
+Inicie o servidor do vite:
+
+```bash
+
+$ npm exec vite
+
+```
+
+Se o servidor vite iniciou então pegue a URL que
+ele lhe indicou e acesse em seu navegador favorito
+(Firefox recomendado).
+
+
 LPLA-br 12/2023
 

@@ -1,7 +1,5 @@
 import { Esfera } from './esfera';
 
-export const DIAMETRO_TERRESTRE = 12756;
-
 export class CorpoCelesteEsferico
 extends Esfera
 {
@@ -9,33 +7,28 @@ extends Esfera
 
   massa;                      // kg
   densidadeMedia;             // g/cm³
-  diametroEquatorial;         // 1 Terra = 12.756km
+
+  diametroEquatorial;         // km
   gravidadeEquatorial;        // m/s²
-  rotacaoGrausPorSegundo;     // graus/segundo
+  perigeu;                    //UA
+  aporgeu;                    //UA
+
+  rotacaoGrausPorSegundo;     // radianos/segundo terra = (7.29^-5)= 0.00004856~
   orientacaoRotacao;          // ('horario'|'anti-horario') = (-=,+=)
   velocidadeEscape;           // km/s
-  /*graus decimais. rotação subordinada à inclinação axial*/
-  inclinacaoAxial;            //graus decimais
+  inclinacaoAxial;            //graus decimais.
+
   temAtmosfera;               //booleano
   pressaoAtmosferica;         //kpa ao nível do mar ou altura média da superfície.
 
-  constructor(
-    diametroEquatorial,
-    caminhoTextura,
-    nome='indefinido',
-  )
+  /** dados corpo.NOME
+   *  caminhoTextura
+   *  nome
+   * */
+  constructor( corpo, caminhoTextura, nome='nulo' )
   {
-    super( (diametroEquatorial / 2), caminhoTextura );
-    this.diametroEquatorial = diametroEquatorial;
+    super( (corpo[`${nome}`].diametroEquatorial / 2) , caminhoTextura );
     this.nome = nome;
-  }
-
-  rotacionarCorpo( gps, orientacaoRotacao )
-  {
-    if ( orientacaoRotacao == 'anti-horario' )
-      this.esfera.rotation.y += gps;
-    else if ( orientacaoRotacao == 'horario' )
-      this.esfera.rotation.y -= gps;
   }
 
 }
