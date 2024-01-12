@@ -2,45 +2,43 @@
  no node. Ignorando a capacidade débil, capenga, mole e bisonha do node de
  requisitar simples dados. Listando-os manualmente. */
 
-/*diametroEquatorial em km divididos por 10.000 (divisão temporária)
-  perigeu e aporgeu em X*10⁶ 
-*/
+/*diametroEquatorial move-se 3 casas decimais à esquerda*/
 export const corpo =
 {
   nulo:{ diametroEquatorial:1, perigeu:0, aporgeu:0 },
   sol:
   {
-    diametroEquatorial: 139.2700,
+    diametroEquatorial: 1392.700,
     perigeu: 0,
     aporgeu: 0
   },
   mercurio:
   {
-    diametroEquatorial: 0.4879, 
+    diametroEquatorial: 4.879, 
     perigeu: 46,
     aporgeu: 0
   },
   venus:
   {
-    diametroEquatorial: 0.12104,
+    diametroEquatorial: 12.104,
     perigeu: 107.5,
     aporgeu: 0
   },
   terra:
   {
-    diametroEquatorial: 0.12756,
+    diametroEquatorial: 12.756,
     perigeu: 147.1,
     aporgeu: 0
   },
   lua:
   {
-    diametroEquatorial: 0.3475,
+    diametroEquatorial: 3.475,
     perigeu: undefined,
     aporgeu: undefined
   },
   marte:
   {
-    diametroEquatorial: 0.6792,
+    diametroEquatorial: 6.792,
     perigeu: 206.7,
     aporgeu: 0
   },

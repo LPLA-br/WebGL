@@ -1,42 +1,74 @@
 import * as THREE from 'three';
 import { corpo } from './dados';
-
-import { CorpoCelesteEsferico } from './planeta';
+import { velocidade, alterarAceleracao } from './fisica';
+import { adicionarCuboDeTeste, novaEsfera } from './geometricos';
+import { definirSkyBox } from './decoracao';
 
 
 const scene = new THREE.Scene();
+definirSkyBox( scene );
+
+//A câmera é a espaçonave
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-camera.position.z = 5;
+let cmr =
+{
+  aceleracaoX: 0,
+  aceleracaoY: 0,
+  aceleracaoZ: 0,
+  velocidadeX: 0,
+  velocidadeY: 0,
+  velocidadeZ: 0,
+  posicaoX: 0,
+  posicaoY: 0,
+  posicaoZ: 0,
+};
 
 document.addEventListener("keydown", aoBaixarDeUmaTecla, false);
 async function aoBaixarDeUmaTecla( event ) 
 {
-  let VELOCIDADE = 0.1;
   let keyCode = event.which;
+  const teclas =
+  {
+    w:87 , s:83 , d:68 , a:65, //translacao
+    r:82, t:84,                // azimute
+    f: 70, g: 71,              // atitude
+    q: 81, z:90                //ascenção
+  };
 
-  if (keyCode == 87) //w
+  switch( keyCode )
   {
-    camera.position.z -= VELOCIDADE;
-  }
-  else if (keyCode == 83) //s
-  {
-    camera.position.z += VELOCIDADE;
-  }
-  else if (keyCode == 68 ) //d
-  {
-    camera.position.x += VELOCIDADE;
-  }
-  else if (keyCode == 65 ) //a
-  {
-    camera.position.x -= VELOCIDADE;
-  }
-  else if( keyCode == 82 ) //r
-  {
-    camera.rotation.y += VELOCIDADE;
-  }
-  else if( keyCode == 84 ) //t
-  {
-    camera.rotation.y -= VELOCIDADE;
+    case teclas.q:
+      cmr.aceleracaoY = alterarAceleracao( cmr.aceleracaoY, 0.01 );
+      break;
+    case teclas.z:
+      cmr.aceleracaoY = alterarAceleracao( cmr.aceleracaoY, -0.01 );
+      break;
+    case teclas.w:
+      cmr.aceleracaoX = alterarAceleracao( cmr.aceleracaoX, 0.01 );
+      break;
+    case teclas.a:
+      cmr.aceleracaoZ = alterarAceleracao( cmr.aceleracaoZ, 0.01 );
+      break;
+    case teclas.s:
+      cmr.aceleracaoX =  alterarAceleracao( cmr.aceleracaoX, -0.01 );
+      break;
+    case teclas.d:
+      cmr.aceleracaoZ = alterarAceleracao( cmr.aceleracaoZ, -0.01 );
+      break;
+    case teclas.r:
+      camera.rotateY(0.1);
+      break;
+    case teclas.t:
+      camera.rotateY(-0.1);
+      break;
+    case teclas.f:
+      camera.rotateX(-0.1);
+      break;
+    case teclas.g:
+      camera.rotateX(0.1);
+      break;
+    default:
+      break
   }
 };
 
@@ -44,23 +76,20 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
-const sol = new CorpoCelesteEsferico( corpo, './texturas/sol.jpg', 'sol' ).get_esfera();
-const mercurio = new CorpoCelesteEsferico( corpo, './texturas/mercurio.jpg', 'mercurio' ).get_esfera();
-const venus = new CorpoCelesteEsferico( corpo, './texturas/venusAtmosfera.jpg', 'venus' ).get_esfera();
-const terra = new CorpoCelesteEsferico( corpo, './texturas/terraDiaSuperficie.jpg', 'terra' ).get_esfera();
-const marte = new CorpoCelesteEsferico( corpo, './texturas/marte.jpg', 'marte' ).get_esfera();
 
+const sol =       novaEsfera( corpo , './texturas/sol.jpg', scene, "sol" );
+const mercurio =  novaEsfera( corpo, './texturas/mercurio.jpg', scene, "mercurio" );
+const venus =     novaEsfera( corpo, './texturas/venusAtmosfera.jpg', scene, "venus" );
+const terra =     novaEsfera( corpo, './texturas/terraDiaSuperficie.jpg', scene, "terra" );
+const marte =     novaEsfera( corpo, './texturas/marte.jpg', scene, "marte" );
 
-scene.add( sol );
-  sol.position.x = corpo.sol.perigeu;
-scene.add( mercurio );
-  mercurio.position.x = corpo.mercurio.perigeu;
-scene.add( venus );
-  venus.position.x = corpo.venus.perigeu;
-scene.add( terra );
-  terra.position.x = corpo.terra.perigeu;
-scene.add( marte );
-  marte.position.x = corpo.marte.perigeu;
+adicionarCuboDeTeste( scene );
+
+sol.position.x = corpo.sol.perigeu;
+mercurio.position.x = corpo.mercurio.perigeu;
+venus.position.x = corpo.venus.perigeu;
+terra.position.x = corpo.terra.perigeu;
+marte.position.x = corpo.marte.perigeu;
 
 // ambiente
 function animate()
@@ -69,6 +98,12 @@ function animate()
   terra.rotation.y += 0.001;
   venus.position.x = 5;
 	renderer.render( scene, camera );
+
+
+  //camera move-se constantemente.
+  camera.position.x += velocidade( cmr.posicaoX, cmr.velocidadeX, cmr.aceleracaoX );
+  camera.position.z += velocidade( cmr.posicaoZ, cmr.velocidadeZ, cmr.aceleracaoZ );
+  camera.position.y += velocidade( cmr.posicaoY, cmr.velocidadeY, cmr.aceleracaoY );
 }
 
 animate();

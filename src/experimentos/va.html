@@ -14,63 +14,9 @@
 			<h1> EXPERIMENTO DE POSIÇÃO ESPACIAL, VELOCIDADE E ACELERAÇÃO </h1>
       <canvas id="superficie" width="1000" height="1000" style="border: 1px solid black">
       </canvas>
-      <input type="number" value="0" id="aceleX" step="0.01"> aceleX </input>
-      <input type="number" value="0" id="aceleY" step="0.01"> aceleY </input>
+      <input type="number" value="0" id="aceleX" step="0.1"> aceleX </input>
+      <input type="number" value="0" id="aceleY" step="0.1"> aceleY </input>
 		</header>
-		<script type="text/javascript">
-
-//velocidade constante
-function velocidadeXY( posicaoXY, velocidade, aceleracao )
-{
-  return (posicaoXY + velocidade) + aceleracao;
-}
-
-function alterarAceleracao( aceleracao, taxa )
-{
-  return aceleracao + taxa;
-}
-
-const o =
-{
-  altura: 10,
-  largura: 10,
-  posicaoX: 0,
-  posicaoY: 500,
-  velocidadeX: 0,
-  velocidadeY: 0,
-  aceleracaoX: 0,
-  aceleracaoY: 0
-};
-let valor = 1;
-
-const canvas = document.getElementById("superficie");
-const aceleY = document.getElementById("aceleY");
-const aceleX = document.getElementById("aceleX");
-
-//loop
-function desenhar()
-{
-  if (canvas.getContext)
-  {
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#000000";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = "#0000FF";
-    ctx.fillRect( o.posicaoX, o.posicaoY, o.altura, o.largura);
-
-    o.posicaoX = velocidadeXY( o.posicaoX, o.velocidadeX, o.aceleracaoX );
-    o.posicaoY = velocidadeXY( o.posicaoY, o.velocidadeY, o.aceleracaoY );
-
-    o.aceleracaoX = alterarAceleracao( o.aceleracaoX, Number.parseFloat(aceleX.value) );
-    o.aceleracaoY = alterarAceleracao( o.aceleracaoY, Number.parseFloat(aceleY.value) );
-
-    ctx.fillText(`${JSON.stringify(o)}`,10,10);
-    
-  }
-  window.requestAnimationFrame( desenhar );
-}
-desenhar();
-    </script>
+		<script type="text/javascript" src="./va.js"> </script>
 	</body>
 </html>
