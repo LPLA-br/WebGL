@@ -1,4 +1,5 @@
 // geometricos
+import * as THREE from 'three';
 
 //testa funcionamento do canvas
 function adicionarCuboDeTeste( scene )
