@@ -6,6 +6,8 @@
     de sistema operacional.
 </P>
 
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Orbit1_pt.svg/800px-Orbit1_pt.svg.png" alt="plano orbital"></img>
+
 <p>
     A iniciativa parte do descontentamento com
     a extrema exclusividade de plataforma do projeto Orbiter
