@@ -1,4 +1,3 @@
-// controle de aceleração.
 
 //velocidade constante
 function velocidadeXY( posicaoXY, velocidade, aceleracao )
@@ -11,19 +10,36 @@ function alterarAceleracao( aceleracao, taxa )
   return aceleracao + taxa;
 }
 
-const o =
+class Corpo
 {
-  altura: 10,
-  largura: 10,
-  posicaoX: 0,
-  posicaoY: 500,
-  velocidadeX: 0,
-  velocidadeY: 0,
-  aceleracaoX: 0,
-  aceleracaoY: 0
-};
-let valor = 1;
+  constructor( alt, lar, px, py, vx, vy, ax, ay, m )
+  {
+    this.altura = alt;
+    this.largura = lar;
+    this.posicaoX = px;
+    this.posicaoY =  py;
+    this.velocidadeX = vx;
+    this.velocidadeY = vy;
+    this.aceleracaoX = ax;
+    this.aceleracaoY = ay;
+    this.massa = m;
+  }
+}
 
+class CorpoEsferico extends Corpo
+{
+  constructor( raio, px, py, vx, vy, ax, ay, m )
+  {
+    super( 0, 0, px, py, vx, vy, ax, ay, m );
+    this.raio = raio;
+  }
+}
+
+let corpos = [];
+corpos.push();
+
+const o = new CorpoEsferico( 5, 0, 500, 0, 0, 0, 0, 10 );
+const planeta = new CorpoEsferico( 10, 500, 500, 0, 0, 0, 0, 1000000000 );
 
 const canvas = document.getElementById("superficie");
 const aceleY = document.getElementById("aceleY");
@@ -61,9 +77,17 @@ function desenhar()
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = "#000000";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.fillRect( 0, 0, 1000, 1000 );
 
-    ctx.fillStyle = "#0000FF";
-    ctx.fillRect( o.posicaoX, o.posicaoY, o.altura, o.largura);
+    ctx.fillStyle = "#FFFFFF";
+
+    const nave = new Path2D();
+    nave.arc( o.posicaoX, o.posicaoY, o.raio, 0, 2 * Math.PI);
+    ctx.fill( nave );
+
+    const circle = new Path2D();
+    circle.arc( planeta.posicaoX, planeta.posicaoY, planeta.raio, 0, 2 * Math.PI);
+    ctx.fill( circle );
 
     o.posicaoX = velocidadeXY( o.posicaoX, o.velocidadeX, o.aceleracaoX );
     o.posicaoY = velocidadeXY( o.posicaoY, o.velocidadeY, o.aceleracaoY );

@@ -1,27 +1,16 @@
 import * as THREE from 'three';
-import { corpo } from './dados';
+import { dados } from './dados';
 import { velocidade, alterarAceleracao } from './fisica';
 import { adicionarCuboDeTeste, novaEsfera } from './geometricos';
 import { definirSkyBox } from './decoracao';
-
+import { Camera } from './camera';
 
 const scene = new THREE.Scene();
 definirSkyBox( scene );
 
 //A câmera é a espaçonave
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-let cmr =
-{
-  aceleracaoX: 0,
-  aceleracaoY: 0,
-  aceleracaoZ: 0,
-  velocidadeX: 0,
-  velocidadeY: 0,
-  velocidadeZ: 0,
-  posicaoX: 0,
-  posicaoY: 0,
-  posicaoZ: 0,
-};
+let cmr = new Camera( 0, 0, 0, 0, 0, 0, 0, 0, 0 );
 
 document.addEventListener("keydown", aoBaixarDeUmaTecla, false);
 async function aoBaixarDeUmaTecla( event ) 
@@ -76,20 +65,22 @@ const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+// https://threejs.org/docs/?q=light#api/en/lights/shadows/PointLightShadow
+const light = new THREE.PointLight( 0xff0000, 1, 100 );
+light.position.set( 50, 50, 50 );
+scene.add( light );
 
-const sol =       novaEsfera( corpo , './texturas/sol.jpg', scene, "sol" );
-const mercurio =  novaEsfera( corpo, './texturas/mercurio.jpg', scene, "mercurio" );
-const venus =     novaEsfera( corpo, './texturas/venusAtmosfera.jpg', scene, "venus" );
-const terra =     novaEsfera( corpo, './texturas/terraDiaSuperficie.jpg', scene, "terra" );
-const marte =     novaEsfera( corpo, './texturas/marte.jpg', scene, "marte" );
+const mercurio =  novaEsfera( dados, './texturas/mercurio.jpg', scene, "mercurio" );
+const venus =     novaEsfera( dados, './texturas/venusAtmosfera.jpg', scene, "venus" );
+const terra =     novaEsfera( dados, './texturas/terraDiaSuperficie.jpg', scene, "terra" );
+const marte =     novaEsfera( dados, './texturas/marte.jpg', scene, "marte" );
 
 adicionarCuboDeTeste( scene );
 
-sol.position.x = corpo.sol.perigeu;
-mercurio.position.x = corpo.mercurio.perigeu;
-venus.position.x = corpo.venus.perigeu;
-terra.position.x = corpo.terra.perigeu;
-marte.position.x = corpo.marte.perigeu;
+mercurio.position.x = dados.mercurio.perigeu;
+venus.position.x =    dados.venus.perigeu;
+terra.position.x =    dados.terra.perigeu;
+marte.position.x =    dados.marte.perigeu;
 
 // ambiente
 function animate()

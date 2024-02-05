@@ -1,4 +1,5 @@
 //características visuais de geometricos
+import * as THREE from 'three';
 
 function definirSkyBox( scene )
 {
