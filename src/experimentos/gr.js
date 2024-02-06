@@ -68,15 +68,16 @@ class Corpo
  * seMover() é polimorfico {difere no algorítmo} */
 class CorpoAlternativo
 {
-  constructor( raio, px, py, vx, vy )
+  constructor( raio, px, py, vx, vy, massa )
   {
     this.raio = raio;
-    this.velocidade = 0.1;
+    this.velocidade = 0.5;
     this.angulo = new Angulo( 0.1 ); //injeção de dependência.
     this.posicaoX = px;
     this.posicaoY = py;
     this.velocidadex = vx;
     this.velocidadey = vy;
+    this.massa = massa;
   }
 
   seMover()
@@ -96,14 +97,32 @@ class CorpoAlternativo
     this.angulo.definirNovoAngulo( +direcao.value );
   }
 
+  // compatível com Corpo
+  determinarDirecaoParaOutroCorpo( corpo )
+  {
+    //atan2((a.y-b.y),(a.x-b.x)) -> arcotangente
+    this.angulo.definirNovoAngulo(
+      (Math.atan2( (corpo.posicaoY),(corpo.posicaoX))
+      *(180/Math.PI))
+    );
+  }
+
+  aplicarGravitacaoUniversalSimples( corpoMassivo )
+  {
+    const distancia = distanciaEntreDoisCorpos( this, corpoMassivo );
+    let forca = gravitacaoUniversal( corpoMassivo, this, Math.abs(distancia) );
+    this.velocidade = (typeof forca == 'NaN') ? (1) : (forca) ;
+    console.log( this.velocidade );
+  }
+
 };
 
 // lista de corpos físicos
 let corpos = []; //dados dos corpos
 
-corpos.push( new Corpo( 10, undefined, undefined, 0, 0, 0, 0, 1000000000 ) );
-corpos.push( new Corpo( 10, undefined, undefined, 0, 0, 0, 0, 1000 ) );
-corpos.push( new CorpoAlternativo(10,100,100,0,0) );
+corpos.push( new Corpo( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
+corpos.push( new Corpo( 10, undefined, undefined, 0, 0, 0, 0, 10 ) );
+corpos.push( new CorpoAlternativo( 10,100,100,0,0, 10) );
 
 const canvas = document.getElementById("superficie");
 
@@ -149,17 +168,37 @@ function moverCorpos( listaDeCorpos )
   }
 }
 
-function lerInputsParaCorposAlternativos( listaDeCorpos )
+// Gambiarra global
+const opt = window.prompt( "1=controleManual *=automâtico 2=TesteGravitação", 0 );
+
+/* Executa especificidades dos corposAlternativos */
+function corposAlternativos( listaDeCorpos )
 {
+
   for( i=0; i<listaDeCorpos.length; i++ )
   {
-    if( typeof listaDeCorpos[i].lerInputsPadronizados != 'undefined' )
+    if(
+        typeof listaDeCorpos[i].lerInputsPadronizados != 'undefined' &&
+        typeof listaDeCorpos[i].determinarDirecaoParaOutroCorpo != 'undefined' &&
+        typeof listaDeCorpos[i].aplicarGravitacaoUniversalSimples != 'undefined'
+    )
     {
-      listaDeCorpos[i].lerInputsPadronizados();
+      switch( opt )
+      {
+        case '1':
+          listaDeCorpos[i].lerInputsPadronizados();
+          break;
+        case '2':
+          listaDeCorpos[i].aplicarGravitacaoUniversalSimples( listaDeCorpos[0] );
+        default:
+          listaDeCorpos[i].determinarDirecaoParaOutroCorpo( listaDeCorpos[0] );
+          break;
+      }
     }
   }
 }
 
+//função principal
 function desenhar()
 {
   if (canvas.getContext)
@@ -171,9 +210,12 @@ function desenhar()
 
     ctx.fillStyle = "#FFFFFF"; //cor das proximas renderizações.
 
+    //essenciais
     renderizarCorpos( corpos, ctx );
     moverCorpos( corpos );
-    lerInputsParaCorposAlternativos( corpos );
+
+    //laterais
+    corposAlternativos( corpos );
 
   }
   window.requestAnimationFrame( desenhar );
