@@ -1,12 +1,10 @@
 
-export default class EntradaTeclado
+class Controle
 {
-
-  /** camera: THREE.PerspectiveCamera objeto */
+  /** camera:Camera */
   constructor( camera )
   {
     this.camera = camera;
-    this.camera.position.z = 10;
   }
 
   executar()
@@ -16,37 +14,37 @@ export default class EntradaTeclado
       switch( ev.key )
       {
         case 'w':
-          this.camera.position.z -= 1;
+          this.camera.acelerarCameraEixoZ( -0.01 );
           break;
         case 'a':
-          this.camera.position.x -= 1;
+          this.camera.acelerarCameraEixoX( -0.01 );
           break;
         case 's':
-          this.camera.position.z += 1;
+          this.camera.acelerarCameraEixoZ( 0.01 );
           break;
         case 'd':
-          this.camera.position.x += 1;
+          this.camera.acelerarCameraEixoX( 0.01 );
           break;
         case 'ArrowLeft':
           break;
         case 'ArrowRight':
           break;
         case 'q':
-          this.camera.position.y += 1;
+          this.camera.acelerarCameraEixoY( 0.01 );
           break;
         case 'z':
-          this.camera.position.y -= 1;
           break;
         case 'e':
-          this.camera.rotateY(0.1);
+          this.camera.camera.rotateY(-0.1);
           break;
         case 'r':
-          this.camera.rotateY(-0.1);
+          this.camera.camera.rotateY(0.1);
           break;
         default:
           break;
       }
     });
   }
-}
+};
 
+export { Controle };

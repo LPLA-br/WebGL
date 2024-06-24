@@ -11,9 +11,11 @@ function novaEsfera( corpo, caminhoTextura, snece, nome )
     let esfera = new THREE.Mesh( geometry, material );
 
     esfera.position.x = corpo[nome].perigeu + 10;
+    esfera.position.y;
+    esfera.position.z;
 
     snece.add( esfera );
     return esfera;
 }
 
-export { adicionarCuboDeTeste, novaEsfera }
+export { novaEsfera }

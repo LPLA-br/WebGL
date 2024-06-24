@@ -1,11 +1,11 @@
 import Cubo from "./cubo";
 
-export default class SerVivo extends Cubo
+export default class Solo extends Cubo
 {
   constructor( posicaox, posicaoy, posicaoz, materialGeometrico )
   {
     super( posicaox, posicaoy, posicaoz, materialGeometrico );
-    this.tipo = "SerVivo";
+    this.tipo = "Solo";
   }
-}
+};
 

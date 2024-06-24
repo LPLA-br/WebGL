@@ -1,30 +1,18 @@
-# PROJETO ASTRONAUTIC
+# WEBGL
 
 <P>
-    Projeto Astronautic é um projeto que visa
-    fornecer um simulador astronautico independente
-    de sistema operacional.
+    Testes com webGL (gráficos tridimensionais e bidimensionais no browser)
+    Repositório destinado a conter algorítmos físicos e ou gráficos
+    na forma de pequenos projetos organizados em subdiretórios.
 </P>
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Orbit1_pt.svg/800px-Orbit1_pt.svg.png" alt="plano orbital"></img>
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/25/WebGL_Logo.svg/96px-WebGL_Logo.svg.png" alt="logotipo da webgl"></img>
 
 <p>
-    A iniciativa parte do descontentamento com
-    a extrema exclusividade de plataforma do projeto Orbiter
-    Space Flight Simulator desenvolvido pelo cientista
-    da computação Martin Schweiger do University College London
-    na Inglaterra.
-</p>
-
-<p>
-    Devido ao meu conhecimento pequeno acerca de mecânica orbital,
-    matemática aplicada e computação gráfica há ABSOLUTAMENTE nenhuma
-    garantia de que será um software capaz de alcançar as capacidades
-    do supracitado simulador.
 </p>
 
 
-## Bibliotecas utilizadas até o momento:
+## Bibliotecas empregadas:
 
 <ul>
     <li> threejs - facilidades para gráficos 3D </li>
@@ -42,10 +30,10 @@ $ npm exec vite
 
 ```
 
-Se o servidor vite iniciou então pegue a URL que
-ele lhe indicou e acesse em seu navegador favorito
-(Firefox recomendado).
-
+Projeto Astronautic abortado devido complexidade
+da implementação da simulação da interação gravitacional
+entre N corpos massivos em um ambiente tridimensional.
 
 LPLA-br 12/2023
+LPLA-br 06/2024
 

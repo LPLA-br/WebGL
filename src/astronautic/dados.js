@@ -12,49 +12,56 @@ export const dados =
     diametroEquatorial:1,
     perigeu:0,
     aporgeu:0,
-    massa: 0
+    massa: 0,
+    rotacao: 0
   },
   sol:
   {
-    diametroEquatorial: 1392.700,
+    diametroEquatorial: 10,
     perigeu: 0,
     aporgeu: 0,
-    massa: 0
+    massa: 0,
+    rotacao: 0
   },
   mercurio:
   {
-    diametroEquatorial: 4.879, 
-    perigeu: 46,
+    diametroEquatorial: 0.4879, 
+    perigeu: 0.46,
     aporgeu: 0,
-    massa: 0.330
+    massa: 0.330,
+    rotacao: 0
   },
   venus:
   {
-    diametroEquatorial: 12.104,
-    perigeu: 107.5,
+    diametroEquatorial: 1.2104,
+    perigeu: 10.75,
     aporgeu: 0,
-    massa: 4.87
+    massa: 4.87,
+    rotacao: 0
   },
   terra:
   {
-    diametroEquatorial: 12.756,
-    perigeu: 147.1,
+    diametroEquatorial: 1.2756,
+    perigeu: 14.71,
     aporgeu: 0,
-    massa: 5.97
+    massa: 5.97,
+    rotacao: 0
   },
   lua:
   {
-    diametroEquatorial: 3.475,
+    diametroEquatorial: 0.3475,
     perigeu: 0,
     aporgeu: 0,
-    massa: 0.073
+    massa: 0.073,
+    rotacao: 0
   },
   marte:
   {
-    diametroEquatorial: 6.792,
-    perigeu: 206.7,
+    diametroEquatorial: 0.6792,
+    perigeu: 20.67,
     aporgeu: 0,
-    massa: 0.642
+    massa: 0.642,
+    rotacao: 0
   },
 }
 
