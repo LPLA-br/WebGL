@@ -1,3 +1,13 @@
+function gravitacaoUniversal( CorpoA, CorpoB, distancia )
+{
+  const G = 0.00000000006674081;
+  return G * ((CorpoA.massa * CorpoB.massa )/(distancia**distancia));
+}
+
+function obterNumeroAleatorioEntre( max, min )
+{
+  return Math.floor( (Math.random() * (max - min + 1)) ) + min ;
+}
 
 /*estrutura para ângulos*/
 class Angulo
@@ -28,11 +38,7 @@ class Angulo
   }
 };
 
-function obterNumeroAleatorioEntre( max, min )
-{
-  return Math.floor( (Math.random() * (max - min + 1)) ) + min ;
-}
-
+/** Direcionado pela velocidade */
 class Corpo
 {
   constructor( raio, px=undefined, py=undefined, vx, vy, ax, ay, m )
@@ -66,13 +72,15 @@ class Corpo
  * Ele pode ser empregado sem modificações no método renderizador!
  * A Herança não é através de extenção, mas sim por interface inplicita.
  * seMover() é polimorfico {difere no algorítmo} */
+
+/** direcionado por ângulo */
 class CorpoAlternativo
 {
   constructor( raio, px, py, vx, vy, massa )
   {
     this.raio = raio;
-    this.velocidade = 0.5;
-    this.angulo = new Angulo( 0.1 ); //injeção de dependência.
+    this.velocidade = 0.1;
+    this.angulo = new Angulo( 0.1 );
     this.posicaoX = px;
     this.posicaoY = py;
     this.velocidadex = vx;
@@ -89,7 +97,7 @@ class CorpoAlternativo
     this.posicaoY += this.velocidadey;
   }
 
-  lerInputsPadronizados()
+  lerEntradasPadronizadasParaUmaInstancia()
   {
     const velocidade = document.getElementById('velocidade'); 
     const direcao = document.getElementById('angulo'); 
@@ -97,22 +105,36 @@ class CorpoAlternativo
     this.angulo.definirNovoAngulo( +direcao.value );
   }
 
-  // compatível com Corpo
-  determinarDirecaoParaOutroCorpo( corpo )
+  anguloAteOutroCorpo( outroCorpo )
   {
-    //atan2((a.y-b.y),(a.x-b.x)) -> arcotangente
-    this.angulo.definirNovoAngulo(
-      (Math.atan2( (corpo.posicaoY),(corpo.posicaoX))
-      *(180/Math.PI))
-    );
+    //lado esquerdo positivo e direito negativo.
+    let angulo = ((Math.atan2( (outroCorpo.posicaoX - this.posicaoX),(outroCorpo.posicaoY - this.posicaoY)))*180)/Math.PI;
+    if ( angulo < 0 ) return (180 - Math.abs( angulo )) + 180;
+    else return angulo;
   }
 
-  aplicarGravitacaoUniversalSimples( corpoMassivo )
+  determinarDistanciaParaOutroCorpo( outroCorpo )
   {
-    const distancia = distanciaEntreDoisCorpos( this, corpoMassivo );
-    let forca = gravitacaoUniversal( corpoMassivo, this, Math.abs(distancia) );
-    this.velocidade = (typeof forca == 'NaN') ? (1) : (forca) ;
-    console.log( this.velocidade );
+    if ( this.posicaoX == outroCorpo.posicaoX )
+    {
+      return Math.abs( this.posicaoY - outroCorpo.posicaoY );
+    }
+    else if ( this.posicaoY == outroCorpo.posicaoY )
+    {
+      return Math.abs( this.posicaoX - outroCorpo.posicaoX );
+    }
+    return Math.sqrt( ((outroCorpo.posicaoX - this.posicaoX)**2)+((outroCorpo.posicaoY - this.posicaoY)**2) );
+  }
+
+  aceleracaoGravitacionalParaOutroCorpo( outroCorpo )
+  {
+    console.log( this.anguloAteOutroCorpo( outroCorpo ), this.velocidade );
+    this.angulo.definirNovoAngulo( this.anguloAteOutroCorpo( outroCorpo ) );
+    if ( this.angulo.angulo > 0 && this.angulo.angulo < 90 ) this.velocidade = 0.1;
+    else if ( this.angulo.angulo > 90 && this.angulo.angulo < 180 ) this.velocidade = -0.1;
+    else if ( this.angulo.angulo > 180 && this.angulo.angulo < 270 ) this.velocidade = 0.1;
+    else if ( this.angulo.angulo > 270 && this.angulo.angulo < 360 ) this.velocidade = -0.1;
+
   }
 
 };
@@ -120,9 +142,8 @@ class CorpoAlternativo
 // lista de corpos físicos
 let corpos = []; //dados dos corpos
 
+corpos.push( new CorpoAlternativo( 10,100,200,0,0, 10) );
 corpos.push( new Corpo( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
-corpos.push( new Corpo( 10, undefined, undefined, 0, 0, 0, 0, 10 ) );
-corpos.push( new CorpoAlternativo( 10,100,100,0,0, 10) );
 
 const canvas = document.getElementById("superficie");
 
@@ -143,23 +164,6 @@ function renderizarCorpos( listaDeCorpos, contexto )
   }
 }
 
-function distanciaEntreDoisCorpos( CorpoA, CorpoB )
-{
-  return Math.sqrt(( CorpoA.posicaoX - CorpoB.posicaoX )^2 + 
-    ( CorpoA.posicaoY - CorpoB.posicaoY)^2 );
-}
-
-function gravitacaoUniversal( CorpoA, CorpoB, distancia )
-{
-  const G = 0.00000000006674081;
-  return (CorpoA.massa * CorpoB.massa * G )/(distancia);
-}
-
-function direcaoEntrePontos( partida, alvo ) // [int,int]
-{
-  return [ Math.abs( partida.posicaoX - alvo.posicaoX ) , Math.abs( partida.posicaoY - alvo.posicaoY ) ];
-}
-
 function moverCorpos( listaDeCorpos )
 {
   for( i=0; i<listaDeCorpos.length; i++ )
@@ -169,7 +173,7 @@ function moverCorpos( listaDeCorpos )
 }
 
 // Gambiarra global
-const opt = window.prompt( "1=controleManual *=automâtico 2=TesteGravitação", 0 );
+const opt = window.prompt( "1=controleManual 2=testeGravitacional", 0 );
 
 /* Executa especificidades dos corposAlternativos */
 function corposAlternativos( listaDeCorpos )
@@ -178,20 +182,17 @@ function corposAlternativos( listaDeCorpos )
   for( i=0; i<listaDeCorpos.length; i++ )
   {
     if(
-        typeof listaDeCorpos[i].lerInputsPadronizados != 'undefined' &&
-        typeof listaDeCorpos[i].determinarDirecaoParaOutroCorpo != 'undefined' &&
-        typeof listaDeCorpos[i].aplicarGravitacaoUniversalSimples != 'undefined'
+        typeof listaDeCorpos[i].lerEntradasPadronizadasParaUmaInstancia != 'undefined' &&
+        typeof listaDeCorpos[i].aceleracaoGravitacionalParaOutroCorpo != 'undefined'
     )
     {
       switch( opt )
       {
         case '1':
-          listaDeCorpos[i].lerInputsPadronizados();
+          listaDeCorpos[0].lerEntradasPadronizadasParaUmaInstancia();
           break;
         case '2':
-          listaDeCorpos[i].aplicarGravitacaoUniversalSimples( listaDeCorpos[0] );
-        default:
-          listaDeCorpos[i].determinarDirecaoParaOutroCorpo( listaDeCorpos[0] );
+          listaDeCorpos[0].aceleracaoGravitacionalParaOutroCorpo( listaDeCorpos[1] );
           break;
       }
     }
