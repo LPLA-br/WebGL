@@ -36,6 +36,31 @@ class Angulo
   {
     this.angulo = ((this.angulo - 1) < 0) ? (360) : (this.angulo-1) ;
   }
+
+  /** retorna uma lista com 360 números de ângulo.
+   *  inicioOutro - ângulo zero deste corresponde a angulo X daquele.
+   *  outroInvertido - outro gira em direção contraria à minha.
+   * */
+  mapearCirculoAngularParaOutroDiferente( inicioOutro=0, outroInvertido=false )
+  {
+    let mapa = [];
+    let circuloB = inicioOutro;
+
+    for( let circuloA = 0; circuloA <= 360; circuloA++ )
+    {
+      if ( circuloB > 360 ) circuloB = 0;
+      if ( circuloB < 0 ) circuloB = 360;
+
+      if ( circuloB != -1 ) mapa.push( circuloB );
+
+      if ( outroInvertido == true ) circuloB--;
+      else circuloB++;
+    }
+    while( mapa.length > 360 ) mapa.pop();
+    return mapa;
+  }
+
+
 };
 
 /** Direcionado pela velocidade */
@@ -79,7 +104,7 @@ class CorpoAlternativo
   constructor( raio, px, py, vx, vy, massa )
   {
     this.raio = raio;
-    this.velocidade = 0.1;
+    this.velocidade = 0;
     this.angulo = new Angulo( 0.1 );
     this.posicaoX = px;
     this.posicaoY = py;
@@ -128,13 +153,9 @@ class CorpoAlternativo
 
   aceleracaoGravitacionalParaOutroCorpo( outroCorpo )
   {
-    console.log( this.anguloAteOutroCorpo( outroCorpo ), this.velocidade );
-    this.angulo.definirNovoAngulo( this.anguloAteOutroCorpo( outroCorpo ) );
-    if ( this.angulo.angulo > 0 && this.angulo.angulo < 90 ) this.velocidade = 0.1;
-    else if ( this.angulo.angulo > 90 && this.angulo.angulo < 180 ) this.velocidade = -0.1;
-    else if ( this.angulo.angulo > 180 && this.angulo.angulo < 270 ) this.velocidade = 0.1;
-    else if ( this.angulo.angulo > 270 && this.angulo.angulo < 360 ) this.velocidade = -0.1;
-
+    const mapa = this.angulo.mapearCirculoAngularParaOutroDiferente();
+    console.log( mapa[Math.trunc(this.anguloAteOutroCorpo( outroCorpo ))] );
+    this.angulo.definirNovoAngulo( mapa[Math.trunc(this.anguloAteOutroCorpo( outroCorpo ))] );
   }
 
 };
