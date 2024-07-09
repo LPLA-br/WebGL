@@ -43,6 +43,20 @@ class Camera
     this.aceleracaoZ = 0;
   }
 
+  definirPosicao(x,y,z)
+  {
+    this.camera.position.x = x;
+    this.camera.position.y = y;
+    this.camera.position.z = z;
+  }
+
+  parar()
+  {
+    this.velocidadeX = 0;
+    this.velocidadeY = 0;
+    this.velocidadeZ = 0;
+  }
+
 //contínuo
 
   moverCameraConformeVelocidade()

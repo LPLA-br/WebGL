@@ -13,6 +13,9 @@ class Controle
     {
       switch( ev.key )
       {
+        case 'x':
+          this.camera.parar();
+          break;
         case 'w':
           this.camera.acelerarCameraEixoZ( -0.01 );
           break;
@@ -25,21 +28,28 @@ class Controle
         case 'd':
           this.camera.acelerarCameraEixoX( 0.01 );
           break;
-        case 'ArrowLeft':
-          break;
-        case 'ArrowRight':
-          break;
+
         case 'q':
           this.camera.acelerarCameraEixoY( 0.01 );
           break;
         case 'z':
+          this.camera.acelerarCameraEixoY( -0.01 );
           break;
-        case 'e':
-          this.camera.camera.rotateY(-0.1);
+
+        case 't':
+          this.camera.camera.rotateX(0.1);
           break;
-        case 'r':
+        case 'g':
+          this.camera.camera.rotateX(-0.1);
+          break;
+
+        case 'f':
           this.camera.camera.rotateY(0.1);
           break;
+        case 'h':
+          this.camera.camera.rotateY(-0.1);
+          break;
+
         default:
           break;
       }

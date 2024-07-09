@@ -1,36 +1,28 @@
 import * as THREE from 'three';
-import { dados } from './dados';
 import { novaEsfera } from './esferas';
-import { definirSkyBox } from './decoracao';
 import { Camera } from './camera';
 import { Controle } from './controle';
 
 const scene = new THREE.Scene();
-definirSkyBox( scene );
 
 //A câmera é a espaçonave
 const camera =  new Camera( 0.1, 0.1 , 0.1, 0, 0, 0, 0, 0, 25, new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 ));
 new Controle( camera ).executar();
+camera.definirPosicao(0,0,10);
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize( window.innerWidth, window.innerHeight );
 document.body.appendChild( renderer.domElement );
 
+const camada01 = novaEsfera( 10, './texturas/terra.jpg', 1, scene );
+const camada02 = novaEsfera( 10.1, './texturas/terraAtmosfera.jpg', 0.5, scene );
+
 // https://threejs.org/docs/?q=light#api/en/lights/shadows/PointLightShadow
-const light = new THREE.PointLight( 0xff0000, 1, 100 );
-light.position.set( 50, 50, 50 );
-scene.add( light );
+const directionalLight = new THREE.DirectionalLight( 0xffffff, 2 );
+scene.add( directionalLight );
+directionalLight.position.set( - 1, 0, 1 ).normalize();
+directionalLight.target = camada01;
 
-const sol      =  novaEsfera( dados, './texturas/sol.jpg', scene, "sol" );
-novaEsfera( dados, './texturas/mercurio.jpg', scene, "mercurio" );
-novaEsfera( dados, './texturas/venusAtmosfera.jpg', scene, "venus" );
-novaEsfera( dados, './texturas/terraDiaSuperficie.jpg', scene, "terra" );
-novaEsfera( dados, './texturas/marte.jpg', scene, "marte" );
-
-
-sol.position.x = 0
-sol.position.y = 0
-sol.position.z = 0
 
 // ambiente
 function animate()
@@ -38,6 +30,8 @@ function animate()
 	requestAnimationFrame( animate );
 	renderer.render( scene, camera.getCamera() );
   camera.moverCameraConformeVelocidade();
+  camada01.rotateY( 0.001 );
+  camada02.rotateY( 0.001 );
 }
 
 animate();
