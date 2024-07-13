@@ -6,15 +6,54 @@
 		<meta name="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title> ASTRONAUTIC </title>
+    <style>
+      .container
+      {
+        display: flex;
+        flex-direction: column;
+        background-color: "#0f0f0f";
+        border: 1px solid #000000;
+        max-width: 50%;
+      }
+      .opacidades
+      {
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
 	</head>
 	<body>
-		<header>
-			<h1> ASTRONAUTIC </h1>
-      <input id="t1" type="text" placeholder="caminho até imagem camada01" />
-      <input id="t2" type="text" placeholder="caminho até imagem camada02" />
-      <input type="button" id="aplicar" value="aplicar" />
-      <input type="button" id="limpar" value="limpar" />
-		</header>
+    <h1> LPSPHERIC </h1>
+    <p> Ferramenta para visualizar imagens planas em esferas. </p>
+    <p>
+      Para visualizar outras imagens na camada 1 e 2 ponha as imagens no diretório
+      sobredito, pressione "limpar" até todas camadas atuais sumirem. insira o caminho
+      ./texturas/NOME_DA_TEXTURA e pressione aplicar.
+    </p>
+    <div class="container">
+      <div class="filePaths">
+        <h2>ARQUIVOS DE IMAGEM</h2>
+        <label for="t1"> imagem01 </label>
+        <input id="t1" type="text" placeholder="caminho até imagem camada01" />
+        <label for="t2"> imagem02 </label>
+        <input id="t2" type="text" placeholder="caminho até imagem camada02" />
+      </div>
+      <div class="opacidades">
+        <h2>OPACIDADES</h2>
+        <label for="opacidade01"> Opacidade da camada 01 </label>
+        <input id="opacidade01" type="range" min="0" max="1" value="1" step="0.1" />
+        <label for="opacidade02"> Opacidade da camada 02 </label>
+        <input id="opacidade02" type="range" min="0" max="1" value="0.5" step="0.1" />
+      </div>
+      <div class="acoes">
+        <h2>AÇÕES</h2>
+        <input id="aplicar" type="button" value="aplicar" />
+        <input id="limpar" type="button" value="limpar" />
+        <label for="rotacao"> rotacionar? </label>
+        <input id="rotacao" type="checkbox" checked />
+        <input id="luz" type="button" value="luz" />
+      </div>
+    </div>
 		<script type="module" src="./main.js"> </script>
 	</body>
 </html>
