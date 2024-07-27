@@ -1,8 +1,5 @@
-function gravitacaoUniversal( CorpoA, CorpoB, distancia )
-{
-  const G = 0.00000000006674081;
-  return G * ((CorpoA.massa * CorpoB.massa )/(distancia**distancia));
-}
+/*DEMONSTRA A CAPACIDADE DE ORIENTAR O
+ *MOVIMENTO DE UM CORPO PELO VALOR DE ÂNGULO */
 
 function obterNumeroAleatorioEntre( max, min )
 {
@@ -66,13 +63,13 @@ class Angulo
   /** Direcionado pela velocidade */
 class Corpo
 {
-  constructor( raio, px=undefined, py=undefined, vx, vy, ax, ay, m )
+  constructor( raio, posicaoX=undefined, posicaoY=undefined, velocidadeX, velocidadeY, ax, ay, m )
   {
     this.raio = raio;
-    this.posicaoX = (typeof px == 'undefined')  ? obterNumeroAleatorioEntre(0,500) : px ;
-    this.posicaoY =  (typeof py == 'undefined') ? obterNumeroAleatorioEntre(0,500) : py ;
-    this.velocidadeX = vx;
-    this.velocidadeY = vy;
+    this.posicaoX = (typeof posicaoX == 'undefined')  ? obterNumeroAleatorioEntre(0,500) : posicaoX ;
+    this.posicaoY =  (typeof posicaoY == 'undefined') ? obterNumeroAleatorioEntre(0,500) : posicaoY ;
+    this.velocidadeX = velocidadeX;
+    this.velocidadeY = velocidadeY;
     this.aceleracaoX = ax;
     this.aceleracaoY = ay;
     this.massa = m;
@@ -91,7 +88,6 @@ class Corpo
   }
 
 };
-module.exports = Corpo;
 
 /* Observações interessantes:
  * CorpoAlternativo é um conjunto de métodos e atributos interseccionante com Corpo.
@@ -102,15 +98,15 @@ module.exports = Corpo;
 /** direcionado por ângulo */
 class CorpoAlternativo
 {
-  constructor( raio, px, py, vx, vy, massa )
+  constructor( raio, posicaoX, posicaoY, velocidadeX, velocidadeY, massa )
   {
     this.raio = raio;
     this.velocidade = 0;
     this.angulo = new Angulo( 0.1 );
-    this.posicaoX = px;
-    this.posicaoY = py;
-    this.velocidadex = vx;
-    this.velocidadey = vy;
+    this.posicaoX = posicaoX;
+    this.posicaoY = posicaoY;
+    this.velocidadex = velocidadeX;
+    this.velocidadey = velocidadeY;
     this.massa = massa;
   }
 
@@ -152,6 +148,7 @@ class CorpoAlternativo
     return Math.sqrt( ((outroCorpo.posicaoX - this.posicaoX)**2)+((outroCorpo.posicaoY - this.posicaoY)**2) );
   }
 
+  // método descartado.
   aceleracaoGravitacionalParaOutroCorpo( outroCorpo )
   {
     const mapa = this.angulo.mapearCirculoAngularParaOutroDiferente();
@@ -161,8 +158,8 @@ class CorpoAlternativo
 
 };
 
-// lista de corpos físicos
-let corpos = []; //dados dos corpos
+// LISTA DE CORPOS FÍSICOS
+let corpos = [];
 
 corpos.push( new CorpoAlternativo( 10,100,200,0,0, 10) );
 corpos.push( new Corpo( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
@@ -194,33 +191,6 @@ function moverCorpos( listaDeCorpos )
   }
 }
 
-// Gambiarra global
-const opt = window.prompt( "1=controleManual 2=testeGravitacional", 0 );
-
-/* Executa especificidades dos corposAlternativos */
-function corposAlternativos( listaDeCorpos )
-{
-
-  for( i=0; i<listaDeCorpos.length; i++ )
-  {
-    if(
-        typeof listaDeCorpos[i].lerEntradasPadronizadasParaUmaInstancia != 'undefined' &&
-        typeof listaDeCorpos[i].aceleracaoGravitacionalParaOutroCorpo != 'undefined'
-    )
-    {
-      switch( opt )
-      {
-        case '1':
-          listaDeCorpos[0].lerEntradasPadronizadasParaUmaInstancia();
-          break;
-        case '2':
-          listaDeCorpos[0].aceleracaoGravitacionalParaOutroCorpo( listaDeCorpos[1] );
-          break;
-      }
-    }
-  }
-}
-
 //função principal
 function desenhar()
 {
@@ -233,12 +203,10 @@ function desenhar()
 
     ctx.fillStyle = "#FFFFFF"; //cor das proximas renderizações.
 
-    //essenciais
     renderizarCorpos( corpos, ctx );
     moverCorpos( corpos );
 
-    //laterais
-    corposAlternativos( corpos );
+    corpos[0].lerEntradasPadronizadasParaUmaInstancia();
 
   }
   window.requestAnimationFrame( desenhar );
