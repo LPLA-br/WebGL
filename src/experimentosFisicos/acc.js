@@ -1,15 +1,20 @@
 
-const METRO = 100; // 1 m/s² = (100 unidades)/s²
+
+// um píxel é um cm
+// um metro equivale a 100 pixeles
+const METRO = 100;
+
+// 1m/s² = (100)/s²
 
 class Corpo
 {
-  constructor( raio, px=100, py=100, vy=0, ay )
+  constructor( raio, posicaoX=100, posicaoY=100, vy=0, aceleracaoY=100 )
   {
     this.raio = raio;
-    this.posicaoY = py;
-    this.posicaoX = px;
+    this.posicaoY = posicaoY;
+    this.posicaoX = posicaoX;
     this.velocidadeY = vy;
-    this.aceleracaoY = ay;
+    this.aceleracaoY = aceleracaoY;
   }
 
   moverSe()
@@ -44,7 +49,7 @@ const canvas = document.querySelector("#superficie");
 const iniciar = document.querySelector( "#inicio" );
 const aceleracao1 = document.querySelector( "#aceleracao1" );
 const aceleracao2 = document.querySelector( "#aceleracao2" );
-
+const atraso = document.querySelector("#atraso");
 
 let corpos = [ new Corpo( 10, 250, 100, 0, 0 ), new Corpo( 10, 750, 100, 0, 0 ) ];
 
@@ -54,6 +59,7 @@ iniciar.addEventListener( 'click', ()=>
   corpos[1].redefinir( 100, (+aceleracao2.value) );
 });
 
+// ArrayOf[Corpo] -> canvas.context -> void
 function renderizarCorpos( listaDeCorpos, contexto )
 {
   for( i=0; i<listaDeCorpos.length; i++ )
@@ -70,6 +76,7 @@ function renderizarCorpos( listaDeCorpos, contexto )
   }
 }
 
+// ArrayOf[Corpo] -> void
 function moverCorpos( listaDeCorpos )
 {
   for( i=0; i<listaDeCorpos.length; i++ )
@@ -80,6 +87,7 @@ function moverCorpos( listaDeCorpos )
   }
 }
 
+// canvas.context -> void
 function Regua( ctx )
 {
   let py = METRO;
@@ -91,7 +99,21 @@ function Regua( ctx )
   }
 }
 
-//setInterval( ()=>{ moverCorpos( corpos ); console.log('t') }, 1000 );
+// string -> number
+function formatarTimestampSegundos( timestamp )
+{
+  return +timestamp.toString().slice(0,10);
+}
+
+// number -> void
+function atrasar( segundos )
+{
+  let tempoFinal = (formatarTimestampSegundos( new Date().getTime() ) + segundos);
+  while( true )
+  {
+    if ( formatarTimestampSegundos((new Date().getTime())) > tempoFinal ) break;
+  }
+}
 
 function desenhar()
 {
@@ -110,6 +132,7 @@ function desenhar()
 
     //essenciais
     renderizarCorpos( corpos, ctx );
+    if ( atraso.checked ) atrasar( 1 );
     moverCorpos( corpos );
   }
   window.requestAnimationFrame( desenhar );
