@@ -12,34 +12,20 @@ renderer.setSize( window.innerWidth, window.innerHeight );
 const controls = new OrbitControls( camera, renderer.domElement );
 document.body.appendChild( renderer.domElement );
 
-// ----------------------------------------------------------------------------------
-const geometry = new THREE.SphereGeometry( 15, 16, 16 );
-const geometryII = new THREE.SphereGeometry( 15, 16, 16 );
+// ui com vertice alvo
+const vertice = document.querySelector("#vertice");
+let distancia = 15;
 
-const dadosPosicionais = geometry.attributes.position;
-const dadosPosicionaisII = geometryII.attributes.position;
-
-for ( let i=0; i<dadosPosicionais.count; i++ )
+function obterNumeroAleatorioEntreInclusivo(min, max)
 {
-  let x = dadosPosicionaisII.getX(i);
-  let y = dadosPosicionaisII.getY(i);
-  let z = dadosPosicionaisII.getZ(i);
-
-  const distanciaCorrente = Math.sqrt( x*x + y*y + z*z );
-  console.log(distanciaCorrente);
-
-  const novaDistanciaX = 3;
-  const novaDistanciaY = 6;
-  const novaDistanciaZ = 9;
-  const escalaX = novaDistanciaX / distanciaCorrente;
-  const escalaY = novaDistanciaY / distanciaCorrente;
-  const escalaZ = novaDistanciaZ / distanciaCorrente;
-  x *= escalaX;
-  y *= escalaY;
-  z *= escalaZ;
-
-  dadosPosicionaisII.setXYZ(i, x, y, z);
+  const minCeiled = Math.ceil(min);
+  const maxFloored = Math.floor(max);
+  return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled);
 }
+
+// ----------------------------------------------------------------------------------
+const geometria = new THREE.SphereGeometry( 15, 16, 16 );
+const dadosPosicionais = geometria.attributes.position;
 
 let modo = 1;
 for ( let i=0; i<dadosPosicionais.count; i++ )
@@ -57,42 +43,74 @@ for ( let i=0; i<dadosPosicionais.count; i++ )
     const escalaX = novaDistanciaX / distanciaCorrente;
     x *= escalaX;
   }
-  else if ( i == 69 && modo == 1 )
+  else if ( modo == 1 )
   {
     /*cada vértice deve ser editado igualmente para os três eixos
     se quiser alterar-se alinhadamente com o centro da esfera.*/
-    const novaDistanciaX = 69;
-    const novaDistanciaY = 69;
-    const novaDistanciaZ = 69;
-    const escalaX = novaDistanciaX / distanciaCorrente;
-    const escalaY = novaDistanciaY / distanciaCorrente;
-    const escalaZ = novaDistanciaZ / distanciaCorrente;
+    const novaDistanciaXYZ = obterNumeroAleatorioEntreInclusivo(14,16);
+    const escalaX = novaDistanciaXYZ / distanciaCorrente;
+    const escalaY = novaDistanciaXYZ / distanciaCorrente;
+    const escalaZ = novaDistanciaXYZ / distanciaCorrente;
     x *= escalaX;
     y *= escalaY;
     z *= escalaZ;
   }
-
   dadosPosicionais.setXYZ(i, x, y, z);
 }
 
 dadosPosicionais.needsUpdate = true;
 
-const material = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
-const sphere = new THREE.Mesh( geometry, material );
+const materialGlobal = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
+const esqueletoEsferico = new THREE.Mesh( geometria, materialGlobal ); //esqueleto
 
-const sphereII = new THREE.Mesh( geometryII, material );
-sphereII.translateX( 100 );
+let objetoEspacial;
+let loader = new THREE.TextureLoader();
 
-scene.add( sphere );
-scene.add( sphereII );
+loader.load( 'textures/Mars.jpg', function ( texture )
+{
+    let material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
+    objetoEspacial = undefined;
+    objetoEspacial = new THREE.Mesh( geometria, material );
+    scene.add( objetoEspacial );
+});
+
+//scene.add( esqueletoEsferico );
 
 camera.position.set( 0, 100, 0 );
 controls.update();
 
+//incremento de vertice alvo
+document.querySelector("#incrementador").addEventListener( "click", ()=>
+{
+  if ( +vertice.value < dadosPosicionais.count )
+  {
+    scene.remove( objetoEspacial );
+    objetoEspacial = undefined;
+    distancia++;
+    let verticeAlvoDoVandalismo = +vertice.value;
+    let x = dadosPosicionais.getX(verticeAlvoDoVandalismo);
+    let y = dadosPosicionais.getY(verticeAlvoDoVandalismo);
+    let z = dadosPosicionais.getZ(verticeAlvoDoVandalismo);
+
+    const distanciaCorrente = Math.sqrt( x*x + y*y + z*z );
+
+    const novaDistanciaXYZ = (distanciaCorrente + distancia);
+    const escalaX = novaDistanciaXYZ / distanciaCorrente;
+    const escalaY = novaDistanciaXYZ / distanciaCorrente;
+    const escalaZ = novaDistanciaXYZ / distanciaCorrente;
+    x *= escalaX;
+    y *= escalaY;
+    z *= escalaZ;
+    dadosPosicionais.setXYZ( verticeAlvoDoVandalismo, x, y, z);
+    objetoEspacial = new THREE.Mesh( geometria, materialGlobal );
+    scene.add( objetoEspacial );
+  }
+});
+
 let wireframe = document.querySelector("#wireframe");
 wireframe.addEventListener("click",()=>
 {
-  material.wireframe = !material.wireframe;
+  materialGlobal.wireframe = !materialGlobal.wireframe;
 });
 
 // ambiente
