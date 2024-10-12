@@ -13,8 +13,8 @@ const controls = new OrbitControls( camera, renderer.domElement );
 document.body.appendChild( renderer.domElement );
 
 // ui com vertice alvo
-const vertice = document.querySelector("#vertice");
-let distancia = 15;
+const verticeElemento = document.querySelector("#vertice");
+const valorElemento = document.querySelector("#valor");
 
 function obterNumeroAleatorioEntreInclusivo(min, max)
 {
@@ -62,39 +62,29 @@ dadosPosicionais.needsUpdate = true;
 
 const materialGlobal = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
 const esqueletoEsferico = new THREE.Mesh( geometria, materialGlobal ); //esqueleto
+let material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( 'textures/Mars.jpg' ), overdraw: 0.5 } );
 
 let objetoEspacial;
-let loader = new THREE.TextureLoader();
 
-loader.load( 'textures/Mars.jpg', function ( texture )
-{
-    let material = new THREE.MeshBasicMaterial( { map: texture, overdraw: 0.5 } );
-    objetoEspacial = undefined;
-    objetoEspacial = new THREE.Mesh( geometria, material );
-    scene.add( objetoEspacial );
-});
-
-//scene.add( esqueletoEsferico );
+scene.add( esqueletoEsferico );
 
 camera.position.set( 0, 100, 0 );
 controls.update();
 
 //incremento de vertice alvo
-document.querySelector("#incrementador").addEventListener( "click", ()=>
+document.querySelector("#manipular").addEventListener( "click", ()=>
 {
-  if ( +vertice.value < dadosPosicionais.count )
+  if ( +verticeElemento.value < dadosPosicionais.count )
   {
     scene.remove( objetoEspacial );
-    objetoEspacial = undefined;
-    distancia++;
-    let verticeAlvoDoVandalismo = +vertice.value;
+    let verticeAlvoDoVandalismo = +verticeElemento.value;
     let x = dadosPosicionais.getX(verticeAlvoDoVandalismo);
     let y = dadosPosicionais.getY(verticeAlvoDoVandalismo);
     let z = dadosPosicionais.getZ(verticeAlvoDoVandalismo);
 
     const distanciaCorrente = Math.sqrt( x*x + y*y + z*z );
 
-    const novaDistanciaXYZ = (distanciaCorrente + distancia);
+    const novaDistanciaXYZ = (distanciaCorrente + Number(valorElemento.value));
     const escalaX = novaDistanciaXYZ / distanciaCorrente;
     const escalaY = novaDistanciaXYZ / distanciaCorrente;
     const escalaZ = novaDistanciaXYZ / distanciaCorrente;
@@ -102,7 +92,9 @@ document.querySelector("#incrementador").addEventListener( "click", ()=>
     y *= escalaY;
     z *= escalaZ;
     dadosPosicionais.setXYZ( verticeAlvoDoVandalismo, x, y, z);
-    objetoEspacial = new THREE.Mesh( geometria, materialGlobal );
+
+    geometria.attributes.position.needsUpdate = true;
+    objetoEspacial = new THREE.Mesh( geometria, material );
     scene.add( objetoEspacial );
   }
 });

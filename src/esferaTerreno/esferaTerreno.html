@@ -27,9 +27,13 @@
     <p> Modificando cada vertice que compõe a esfera </p>
     <p> posteriormente mapear heightmap para esfera </p>
 		<script type="module" src="./main.js"> </script>
-    <input id="vertice" type="number" value="1" min="0" max="64" />
-    <button id="incrementador">++</button>
-    <button id="decrementador">--</button>
+    <label for="vertice"> Vértice alvo: </label>
+    <input id="vertice" type="number" value="1" step="1" />
+    <br>
+    <label for="valor"> Número Racional: </label>
+    <input id="valor" type="number" value="-0,1" step="0.1" />
+    <br>
+    <button id="manipular"> manipular </button>
     <button id="wireframe"> wireframe </button>
 	</body>
 </html>
