@@ -1,5 +1,11 @@
+import * as ImgAvalia from "./ImgAvalia";
+import Mars8b from "../public/Demo10x10x8.bmp?raw"
 
 const canvas = document.getElementById("superficie");
+
+const utf8Encode = new TextEncoder();
+const imagemBytes = utf8Encode.encode(Mars8b);
+const imgDados = ImgAvalia.extrairPixelesParaMatrizDeMatrizesComBytesIndependente( imagemBytes, 10, 10 );
 
 /** Retorna posição y computando com x
  * @param {true|false} - inversão
@@ -26,6 +32,11 @@ function circulo( h=2, k=2, x, y, r=1 )
   r**2;
 }
 
+function quadratica( a=1, b, c, x )
+{
+  return a*x**2 + b*x + c;
+}
+
 let x = 1;
 let init = true;
 
@@ -45,11 +56,16 @@ function desenhar()
       ctx.fillRect( 0, 0, canvas.width, canvas.height );
       init = false;
     }
-    ctx.clearRect(500,500,10,10);
+    //ctx.clearRect(500,500,10,10);
    
-    //PROGRAM
-    ctx.fillStyle = "#ffffff";
-    ctx.clearRect( x, semiCirculo(x,false,100), 2, 2 );
+    /* MATH */
+    //ctx.fillStyle = "#ffffff";
+    //ctx.clearRect( x, semiCirculo(x,false,100), 2, 2 );
+    /* MATH */
+
+    /*BMP*/
+    ImgAvalia.reproduzirSequenciaBytesEmCanvas( imagemBytes, 10, ctx, 10, 10, 37 );
+    /*BMP*/
   }
   window.requestAnimationFrame( desenhar );
 }
