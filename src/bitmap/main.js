@@ -1,11 +1,12 @@
 import * as ImgAvalia from "./ImgAvalia";
-import Mars8b from "../public/Demo10x10x8.bmp?raw"
+import Mars8b from "../public/Mars8b.bmp?raw"
+import mars from "../public/mars.bmp?raw"
 
 const canvas = document.getElementById("superficie");
 
 const utf8Encode = new TextEncoder();
 const imagemBytes = utf8Encode.encode(Mars8b);
-const imgDados = ImgAvalia.extrairPixelesParaMatrizDeMatrizesComBytesIndependente( imagemBytes, 10, 10 );
+const imagemBytes2 = utf8Encode.encode(mars);
 
 /** Retorna posição y computando com x
  * @param {true|false} - inversão
@@ -44,6 +45,19 @@ setInterval( ()=>{
   x = (x<300) ? (x += 0.5) : (x)
 }, 10 );
 
+let exec = true;
+let altura = 1024;
+let largura = 512;
+let profundidade = 1;
+const reload = document.querySelector("#reload");
+const alturaEle = document.querySelector("#altura");
+const larguraEle = document.querySelector("#largura");
+const profundidadeEle = document.querySelector("#profundidade");
+reload.addEventListener("click", ()=>{});
+alturaEle.addEventListener("click", ()=>{ altura=alturaEle.value });
+larguraEle.addEventListener("click", ()=>{ largura=larguraEle.value });
+profundidadeEle.addEventListener("click", ()=>{ profundidade=profundidadeEle.value });
+
 function desenhar()
 {
   if (canvas.getContext)
@@ -64,9 +78,14 @@ function desenhar()
     /* MATH */
 
     /*BMP*/
-    ImgAvalia.reproduzirSequenciaBytesEmCanvas( imagemBytes, 10, ctx, 10, 10, 37 );
+    if ( exec )
+    {
+      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 1, profundidade,ctx, largura, altura, 0x37 );
+      exec=false
+    }
     /*BMP*/
   }
   window.requestAnimationFrame( desenhar );
 }
 desenhar();
+

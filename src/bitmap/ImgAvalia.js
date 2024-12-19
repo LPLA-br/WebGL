@@ -1,6 +1,8 @@
 /* avaliação de imagens https://gibberlings3.github.io/iesdp/file_formats/ie_formats/bmp.htm*/
 
-/* Funções não muito correlatas: BMP para HeightMap*/
+/* Estudos sobre a estrutura de dados de um bitmap
+ * para para mapeamento de cor para distância de vértice
+ * em esferas tridimensionais*/
 
 /* Converte pixel de escala de cinza para altura.
  * menorValorAltura <= x <= maiorValorAltura 
@@ -123,6 +125,23 @@ function reproduzirSequenciaBytesEmCanvas( imagemBytes, tamPixeles=1, contextoCa
   }
 }
 
+/* profundidadeDados bytes por píxel*/
+function reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, tamPixeles=1, profundidadeDados=1, contextoCanvas, larguraImagem=1, alturaImagem=1, byteInicial=37 )
+{
+  let leitor = byteInicial;
+
+  for ( let x = 0 ; x < (larguraImagem*tamPixeles); x += tamPixeles )
+  {
+    for ( let y = 0 ; y < (alturaImagem*tamPixeles); y += tamPixeles )
+    {
+      contextoCanvas.fillStyle = converterCor8bitUint8Para32bitsRGBString( imagemBytes[ leitor ] );
+      contextoCanvas.clearRect( x, y, tamPixeles, tamPixeles );
+      contextoCanvas.fillRect( x, y, tamPixeles, tamPixeles );
+      leitor += profundidadeDados; //salto n à n
+    }
+  } 
+}
+
 export { pixelParaAltura, converterCor8bitUint8Para32bitsRGBString,
   extrairPixelesParaMatrizDeMatrizesComBytesIndependente, converterCor8bitUint8Para32bitsHex,
-  reproduzirImagemEmCanvas, reproduzirSequenciaBytesEmCanvas };
+  reproduzirImagemEmCanvas, reproduzirSequenciaBytesEmCanvas, reproduzirSequenciaBytesEmCanvasProfundidade };
