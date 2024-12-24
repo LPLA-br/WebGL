@@ -1,6 +1,6 @@
 import * as ImgAvalia from "./ImgAvalia";
 import Mars8b from "../public/Mars8b.bmp?raw"
-import mars from "../public/mars.bmp?raw"
+import mars from "../public/mars.pgm?raw"
 
 const canvas = document.getElementById("superficie");
 
@@ -45,19 +45,31 @@ setInterval( ()=>{
   x = (x<300) ? (x += 0.5) : (x)
 }, 10 );
 
-let exec = true;
 let altura = 1024;
 let largura = 512;
 let profundidade = 1;
-const reload = document.querySelector("#reload");
 const alturaEle = document.querySelector("#altura");
 const larguraEle = document.querySelector("#largura");
 const profundidadeEle = document.querySelector("#profundidade");
-reload.addEventListener("click", ()=>{});
 alturaEle.addEventListener("click", ()=>{ altura=alturaEle.value });
 larguraEle.addEventListener("click", ()=>{ largura=larguraEle.value });
 profundidadeEle.addEventListener("click", ()=>{ profundidade=profundidadeEle.value });
+ 
+const arquivo = document.querySelector("#fileInput");
+function leitor( arquivo, callback )
+{
+  const fr = FileReader();
+  fr.onload = () => callback(null, fr.result);
+  fr.onerror = () => callback(err);
+  fr.(file);
+}
 
+arquivo.addEventListener( "change", (e)=> {
+  if ( !e.target.files ) return;
+  const leitor = new FileReader();
+});
+
+let contador = 0;
 function desenhar()
 {
   if (canvas.getContext)
@@ -78,11 +90,13 @@ function desenhar()
     /* MATH */
 
     /*BMP*/
-    if ( exec )
+    if ( contador == 0 )
     {
-      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 1, profundidade,ctx, largura, altura, 0x37 );
-      exec=false
+      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 2, profundidade, ctx, largura, altura, 0x37 );
+      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes2, 5, 1, ctx, 45, 49, 0x09 );
+      contador = (1*10**3);
     }
+    contador--;
     /*BMP*/
   }
   window.requestAnimationFrame( desenhar );

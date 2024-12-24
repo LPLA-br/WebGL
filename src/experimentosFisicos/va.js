@@ -1,15 +1,4 @@
 
-//velocidade constante
-function velocidadeXY( posicaoXY, velocidade, aceleracao )
-{
-  return (posicaoXY + velocidade) + aceleracao;
-}
-
-function alterarAceleracao( aceleracao, taxa )
-{
-  return aceleracao + taxa;
-}
-
 class Corpo
 {
   constructor( alt, lar, px, py, vx, vy, ax, ay, m )
@@ -53,19 +42,19 @@ async function aoBaixarDeUmaTecla( event )
 
   if (keyCode == 87) //w
   {
-    o.aceleracaoY += 0.1;
+    o.aceleracaoY -= 0.01;
   }
   else if (keyCode == 83) //s
   {
-    o.aceleracaoY -= 0.1;
+    o.aceleracaoY += 0.01;
   }
   else if (keyCode == 68 ) //d
   {
-    o.aceleracaoX -= 0.1;
+    o.aceleracaoX += 0.01;
   }
   else if (keyCode == 65 ) //a
   {
-    o.aceleracaoX += 0.1;
+    o.aceleracaoX -= 0.01;
   }
 };
 
@@ -89,11 +78,18 @@ function desenhar()
     circle.arc( planeta.posicaoX, planeta.posicaoY, planeta.raio, 0, 2 * Math.PI);
     ctx.fill( circle );
 
-    o.posicaoX = velocidadeXY( o.posicaoX, o.velocidadeX, o.aceleracaoX );
-    o.posicaoY = velocidadeXY( o.posicaoY, o.velocidadeY, o.aceleracaoY );
+    ctx.strokeStyle = "red";
+    ctx.beginPath();
+    ctx.moveTo( o.posicaoX, o.posicaoY );
+    ctx.lineTo( o.posicaoX+o.velocidadeX*8, o.posicaoY+o.velocidadeY*8 );
+    ctx.stroke();
 
-    o.aceleracaoX = alterarAceleracao( o.aceleracaoX, Number.parseFloat(aceleX.value) );
-    o.aceleracaoY = alterarAceleracao( o.aceleracaoY, Number.parseFloat(aceleY.value) );
+    o.posicaoX += o.velocidadeX;
+    o.posicaoY += o.velocidadeY;
+    o.velocidadeX += o.aceleracaoX;
+    o.velocidadeY += o.aceleracaoY;
+    o.aceleracaoX;
+    o.aceleracaoY;
 
     ctx.fillText(`${JSON.stringify(o)}`,10,10);
     
