@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+	<head>
+		<meta charset="utf-8">
+		<meta name="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title> visualizando funções matemáticas </title>
+	</head>
+	<body>
+		<header>
+			<h1> AMBIENTE CANVAS MISCELÂNEA PARA EXPERIMENTOS </h1>
+      <input type="file" id="fileInput" />
+      <label for="profundidade">
+        <input id="profundidade" type="range" step="1" min="1" max="16" value="1">
+      </label>
+      <label for="altura">
+        <input id="altura" type="number" min="1" max="2048" value="512" >
+      </label>
+      <label for="largura">
+        <input id="largura" type="number" min="1" max="2048" value="1024" >
+      </label>
+      <canvas id="superficie" width="2048" height="2048" style="border: 1px solid black">
+      </canvas>
+		</header>
+		<script type="module" src="./main.js"> </script>
+    <a href="index.html"> inicio </a>
+	</body>
+</html>
