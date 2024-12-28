@@ -90,7 +90,7 @@ function correcao( objetoA, objetoB, d, quadrante )
     case 3:
       return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d)))))+180
     case 4:
-      return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d)))))-360
+      return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d))))-360)
     default:
       return 0;
   }
@@ -124,7 +124,7 @@ class CorpoEsferico extends Corpo
 let corpos = [];
 corpos.push();
 
-const o = new CorpoEsferico( 5, 0, 500, 0, 0, 0, 0, 10 );
+const o = new CorpoEsferico( 5, 300, 400, 0, 0, 0, 0, 10 );
 const planeta = new CorpoEsferico( 10, 500, 500, 0, 0, 0, 0, 1000000000 );
 
 const canvas = document.getElementById("superficie");
@@ -182,16 +182,11 @@ function desenhar()
     circle.arc( planeta.posicaoX, planeta.posicaoY, planeta.raio, 0, 2 * Math.PI);
     ctx.fill( circle );
 
+    //velocidade
     ctx.strokeStyle = "red";
     ctx.beginPath();
     ctx.moveTo( o.posicaoX, o.posicaoY );
     ctx.lineTo( o.posicaoX+o.velocidadeX*8, o.posicaoY+o.velocidadeY*8 );
-    ctx.stroke();
-
-    ctx.strokeStyle = "blue";
-    ctx.beginPath();
-    ctx.moveTo( o.posicaoX, o.posicaoY );
-    ctx.lineTo( planeta.posicaoX, planeta.posicaoY );
     ctx.stroke();
 
     o.posicaoX += o.velocidadeX;
@@ -201,16 +196,39 @@ function desenhar()
     o.aceleracaoX;
     o.aceleracaoY;
 
+
     d = distancia(o,planeta);
     s = senoRelativo(o,planeta,d);
     c = cossenoRelativo(o,planeta,d);
+    ba = correcao(o,planeta,d,quadranteRelativo(o,planeta));
+    ab = anguloInverso(correcao(o,planeta,d,quadranteRelativo(o,planeta)));
     ctx.fillText(`${JSON.stringify(o)}`,10,10);
     ctx.fillText(`d=${d}`,10,20);
     ctx.fillText(`rel_sen=${s}`,10,30);
     ctx.fillText(`rel_cos=${c}`,10,40);
-    ctx.fillText(`grau_B_ate_A=${correcao(o,planeta,d,quadranteRelativo(o,planeta))}`,10,50);
-    ctx.fillText(`grau_A_ate_B=${anguloInverso(correcao(o,planeta,d,quadranteRelativo(o,planeta)))}`,10,60);
+    ctx.fillText(`grau_B_ate_A=${ba}`,10,50);
+    ctx.fillText(`grau_A_ate_B=${ab}`,10,60);
 
+    let aceleracaoArbitrária = 0.01;
+    if ( o.posicaoX < planeta.posicaoX )
+    {
+      aceleracaoArbitrária = 0.01;
+      o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
+      o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
+    }
+    else
+    {
+      aceleracaoArbitrária = -0.01;
+      o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
+      o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
+    }
+
+    //direção do planeta
+    ctx.strokeStyle = "blue";
+    ctx.beginPath();
+    ctx.moveTo( o.posicaoX, o.posicaoY );
+    ctx.lineTo( planeta.posicaoX, planeta.posicaoY );
+    ctx.stroke();
     
   }
   window.requestAnimationFrame( desenhar );

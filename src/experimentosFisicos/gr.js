@@ -213,4 +213,5 @@ function desenhar()
 }
 desenhar();
 
+export { Angulo };
 
