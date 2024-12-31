@@ -79,8 +79,8 @@ function desenhar()
     /*BMP*/
     if ( contador == 0 )
     {
-      //ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 2, profundidade, ctx, largura, altura, 0x37 );
-      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes2, 10, 1, ctx, 45, 49, 0x09 );
+      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 2, profundidade, ctx, largura, altura, 0x37 );
+      //ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes2, 10, 1, ctx, 45, 49, 0x09 );
       contador = (1*10**3);
     }
     contador--;

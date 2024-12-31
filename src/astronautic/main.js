@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { novaEsfera } from './esferas';
+import { novaEsfera, novaEsferaInrregular } from './esferas';
 //import { Camera } from './camera';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { PerspectiveCamera } from 'three';
@@ -34,8 +34,9 @@ let iluminacao = new THREE.DirectionalLight( 0xffffff, 2 );
 
 // ----------------------------------------------------------------------------------
 
-objetos.push( novaEsfera( 10, './texturas/terra.jpg', opacidades.camada01, scene ) );
-objetos.push( novaEsfera( 10.1, './texturas/atmosfera.jpg', opacidades.camada02, scene ) );
+objetos.push( novaEsferaInrregular( 10, '../public/terra.jpg','../public/TerraHeightmap.png',opacidades.camada01, 1, scene ) );
+objetos.push( novaEsfera( 10.5, '../public/Oceano.png', opacidades.camada01, scene ) );
+objetos.push( novaEsfera( 11, '../public/atmosfera.jpg', opacidades.camada02, scene ) );
 
 // pontapé inicial na iluminação para tudo não ficar escuro.
 iluminacao.target = objetos[0];
