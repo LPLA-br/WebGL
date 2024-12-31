@@ -57,16 +57,38 @@ for ( let i=0; i<dadosPosicionais.count; i++ )
   }
   dadosPosicionais.setXYZ(i, x, y, z);
 }
-
 dadosPosicionais.needsUpdate = true;
 
 const materialGlobal = new THREE.MeshBasicMaterial( { color: 0x00ff00, wireframe: true } );
 const esqueletoEsferico = new THREE.Mesh( geometria, materialGlobal ); //esqueleto
-let material = new THREE.MeshBasicMaterial( { map: new THREE.TextureLoader().load( 'textures/Mars.jpg' ), overdraw: 0.5 } );
+let material = new THREE.MeshBasicMaterial(
+  {
+    map: new THREE.TextureLoader().load( 'textures/Mars.jpg' ),
+    overdraw: 0.5
+  }
+);
 
 let objetoEspacial;
 
+esqueletoEsferico.translateX(40);
 scene.add( esqueletoEsferico );
+
+// Programador burro descobre Heightmap de material 31 dez 2024
+const geometriaNova = new THREE.SphereGeometry(20, 64, 64);
+const materialNovo  = new THREE.MeshStandardMaterial(
+  {
+    color: 0x964800,
+    displacementMap: new THREE.TextureLoader().load( '../public/Venus.png' ),
+    map: new THREE.TextureLoader().load( '../public/Venus.png' ),
+    displacementScale: 2,
+    wireframe: false
+  }
+);
+const esferaNova = new THREE.Mesh( geometriaNova, materialNovo );
+scene.add(esferaNova);
+const luzAmbiente = new THREE.AmbientLight(0xffffff, 2);
+scene.add(luzAmbiente);
+
 
 camera.position.set( 0, 100, 0 );
 controls.update();

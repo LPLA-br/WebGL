@@ -7,6 +7,7 @@ const canvas = document.getElementById("superficie");
 const utf8Encode = new TextEncoder();
 const imagemBytes = utf8Encode.encode(Mars8b);
 const imagemBytes2 = utf8Encode.encode(mars);
+console.log(imagemBytes2)
 
 /** Retorna posição y computando com x
  * @param {true|false} - inversão
@@ -55,20 +56,6 @@ alturaEle.addEventListener("click", ()=>{ altura=alturaEle.value });
 larguraEle.addEventListener("click", ()=>{ largura=larguraEle.value });
 profundidadeEle.addEventListener("click", ()=>{ profundidade=profundidadeEle.value });
  
-const arquivo = document.querySelector("#fileInput");
-function leitor( arquivo, callback )
-{
-  const fr = FileReader();
-  fr.onload = () => callback(null, fr.result);
-  fr.onerror = () => callback(err);
-  fr.(file);
-}
-
-arquivo.addEventListener( "change", (e)=> {
-  if ( !e.target.files ) return;
-  const leitor = new FileReader();
-});
-
 let contador = 0;
 function desenhar()
 {
@@ -92,8 +79,8 @@ function desenhar()
     /*BMP*/
     if ( contador == 0 )
     {
-      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 2, profundidade, ctx, largura, altura, 0x37 );
-      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes2, 5, 1, ctx, 45, 49, 0x09 );
+      //ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes, 2, profundidade, ctx, largura, altura, 0x37 );
+      ImgAvalia.reproduzirSequenciaBytesEmCanvasProfundidade( imagemBytes2, 10, 1, ctx, 45, 49, 0x09 );
       contador = (1*10**3);
     }
     contador--;
