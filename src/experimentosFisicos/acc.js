@@ -1,8 +1,8 @@
 /*SIMPLES EXPERIMENTO DE QUEDA
- * Classe requer LiteralEntradas correspondente para funcionar
+ * Classe requer LiteralEntradasAcc correspondente para funcionar
  * */
 
-import Corpo from "./corpo";
+import CorpoVertical from "./corpoVertical";
 import RenderizadorCanvas from "./renderizadorCanvas";
 import Tempo from "./tempo";
 
@@ -11,7 +11,7 @@ import Tempo from "./tempo";
 const METRO = 100;
 
 //gambiarra com object literal
-const LiteralEntradas =
+const LiteralEntradasAcc =
 {
   iniciar: document.querySelector( "#inicio" ),
   aceleracao1: document.querySelector( "#aceleracao1" ),
@@ -23,40 +23,40 @@ class RenderizadorCanvasAcc extends RenderizadorCanvas
 {
   iniciarAmbienteDeObjetos()
   {
-    this.adicionarObjeto(  new Corpo( 10, 250, 100, 0, 0 ) );
-    this.adicionarObjeto(  new Corpo( 10, 750, 100, 0, 0 )  );
+    this.adicionarObjeto(  new CorpoVertical( 10, 250, 100, 0, 0 ) );
+    this.adicionarObjeto(  new CorpoVertical( 10, 750, 100, 0, 0 )  );
 
     this.literalEntradas.iniciar.addEventListener( 'click', ()=>
     {
-      corpos[0].redefinir( 100, (+this.literalEntradas.aceleracao1.value) );
-      corpos[1].redefinir( 100, (+this.literalEntradas.aceleracao2.value) );
+      this.objetos[0].redefinir( 100, (+this.literalEntradas.aceleracao1.value) );
+      this.objetos[1].redefinir( 100, (+this.literalEntradas.aceleracao2.value) );
     });
   }
 
   desenhar()
   {
-      if (this.canvas.getContext)
+    if ( this.canvas.getContext )
+    {
+      this.fundoPreto();
+
+      this.context.fillStyle = "#00FF00"
+      this.context.fillRect( 0, 900, 1000, 10 );
+      this.renderizarRegua( this.context );
+
+      this.context.fillStyle = "#FFFFFF"; //cor das proximas renderizações.
+
+      this.renderizarCorpos();
+      if ( this.literalEntradas.atraso.checked )
       {
-        this.fundoPreto();
-
-        this.context.fillStyle = "#00FF00"
-        this.context.fillRect( 0, 900, 1000, 10 );
-        this.renderizarRegua( this.context );
-
-        this.context.fillStyle = "#FFFFFF"; //cor das proximas renderizações.
-
-        this.renderizarCorpos( corpos, this.context );
-        if ( this.literalEntradas.atraso.checked )
-        {
-          Tempo().atrasar( 1 );
-        }
-        this.moverCorpos( corpos );
+        //new Tempo().atrasar( 1 ); //obsoleto
       }
-      window.requestAnimationFrame( desenhar );
+      this.atualizarRenderizaçãoPosicionalObjetos();
+    }
   }
 
   // --- superconjunto ---
 
+  //private
   renderizarCorpos()
   {
     for( let i=0; i<this.objetos.length; i++ )
@@ -73,8 +73,8 @@ class RenderizadorCanvasAcc extends RenderizadorCanvas
     }
   }
 
-  //RENOMEARPARA: atualizarRenderizacaoPosicionalObjetos
-  moverCorpos()
+  //private
+  atualizarRenderizaçãoPosicionalObjetos()
   {
     for( let i=0; i<this.objetos.length; i++ )
     {
@@ -84,6 +84,7 @@ class RenderizadorCanvasAcc extends RenderizadorCanvas
     }
   }
 
+  //private
   renderizarRegua()
   {
     let py = METRO;
@@ -97,4 +98,4 @@ class RenderizadorCanvasAcc extends RenderizadorCanvas
 
 };
 
-export { RenderizadorCanvasAcc, LiteralEntradas };
+export { RenderizadorCanvasAcc, LiteralEntradasAcc };

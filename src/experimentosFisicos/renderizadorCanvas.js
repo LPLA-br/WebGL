@@ -24,6 +24,7 @@ export default class RenderizadorCanvas
     this.context.fillRect( 0, 0, 1000, 1000 );
   }
 
+  //inútil
   adicionarObjeto( objeto={} )
   {
     this.objetos.push( objeto );
