@@ -2,7 +2,7 @@
 
 Contém experimentos para entender melhor a física
 programada em ambientes gráficos de duas dimensões
-(canvas).
+(canvas). Poderá ter para ambientes tridimensionais.
 
 <ul>
     <li> va - demonstra aceleracao </li>

@@ -1,3 +1,4 @@
+/* EXPERIMENTOS EVOLUTIVOS PARA SIMULAÇÃO GRAVITACIONAL */
 
 function radianoParaGrau( radiano )
 {
@@ -127,7 +128,7 @@ corpos.push();
 const o = new CorpoEsferico( 5, 300, 400, 0, 0, 0, 0, 10 );
 const planeta = new CorpoEsferico( 10, 500, 500, 0, 0, 0, 0, 1000000000 );
 
-const canvas = document.getElementById("superficie");
+const canvas = document.getElementById("gravidadeSuperficie");
 const aceleY = document.getElementById("aceleY");
 const aceleX = document.getElementById("aceleX");
 
@@ -197,11 +198,12 @@ function desenhar()
     o.aceleracaoY;
 
 
-    d = distancia(o,planeta);
-    s = senoRelativo(o,planeta,d);
-    c = cossenoRelativo(o,planeta,d);
-    ba = correcao(o,planeta,d,quadranteRelativo(o,planeta));
-    ab = anguloInverso(correcao(o,planeta,d,quadranteRelativo(o,planeta)));
+    let d = distancia(o,planeta);
+    let s = senoRelativo(o,planeta,d);
+    let c = cossenoRelativo(o,planeta,d);
+    let ba = correcao(o,planeta,d,quadranteRelativo(o,planeta));
+    let ab = anguloInverso(correcao(o,planeta,d,quadranteRelativo(o,planeta)));
+
     ctx.fillText(`${JSON.stringify(o)}`,10,10);
     ctx.fillText(`d=${d}`,10,20);
     ctx.fillText(`rel_sen=${s}`,10,30);

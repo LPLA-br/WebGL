@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title> Experimentos </title>
+    <style>
+      .seccoes
+      {
+        border: 1px solid black;
+      }
+    </style>
+  </head>
+  <body>
+
+
+    <header>
+      <h1> HTML ÚNICO PARA EXPERIMENTOS </h1>
+      <p> Permite uso de import e export ECMASCRIPT melhorando refatoração </p>
+      <fieldset>
+        <legend> Escolha o programa de experimento </legend>
+        <input type="radio" id="aceleracao" name="aceleracao" value="A">
+        <label for="aceleracao"> ACELERAÇÃO </label><br>
+        <input type="radio" id="angulo" name="angulo" value="B">
+        <label for="angulo"> ÂNGULO </label><br>
+        <input type="radio" id="queda" name="queda" value="C">
+        <label for="queda"> QUEDA </label><br>
+      </fieldset>
+    </header>
+    
+    <main>
+      <section class="seccoes">
+        <h2> ACCELERACAO GRAVITACIONAL VISUAL COMPARATIVA </h2>
+        <p> antes de iniciar a simulação certifica-te de ativar a gambiarra "por segundo"  </p>
+
+        <canvas id="quedaSuperficie" width="1000" height="1000" style="border: 1px solid black"> </canvas>
+
+        <div>
+          <label for="aplicarAtraso"> POR SEGUNDO </label>
+          <input type="checkbox" id="atraso" checked="false" />
+        </div>
+        <input id="aceleracao1" type="number" value="0" id="angulo" />
+        <input id="aceleracao2" type="number" value="0" id="angulo" />
+        <button id="inicio"> INICIAR </button>
+      </section>
+
+      <section class="seccoes">
+        <div>
+          <h2> VELOCIDADE, ACELERAÇÃO E DIREÇÃO ÂNGULAR </h2>
+          <canvas id="anguloSuperficie" width="500" height="500" style="border: 1px solid black">
+          </canvas>
+        </div>
+        <label for="velocidade">Velocidade</label>
+        <input type="number" value="0" id="velocidade" />
+        <label for="angulo">Ângulo</label>
+        <input type="range" value="0" min="0" max="360" id="angulo" />
+      </section>
+
+      <section class="seccoes">
+        <h2> EXPERIMENTO DE POSIÇÃO ESPACIAL, VELOCIDADE E ACELERAÇÃO </h2>
+        <canvas id="gravidadeSuperficie" width="1000" height="1000" style="border: 1px solid black"> </canvas>
+        <input type="number" value="0" id="aceleX" step="0.1"> aceleX </input>
+        <input type="number" value="0" id="aceleY" step="0.1"> aceleY </input>
+      </section>
+
+      <script type="module" src="main.js"></script>
+
+    </main>
+    
+  </body>
+</html>

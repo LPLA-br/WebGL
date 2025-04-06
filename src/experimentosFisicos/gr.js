@@ -1,64 +1,14 @@
 /*DEMONSTRA A CAPACIDADE DE ORIENTAR O
  *MOVIMENTO DE UM CORPO PELO VALOR DE ÂNGULO */
 
+import Angulo from "./angulo";
+
+
 function obterNumeroAleatorioEntre( max, min )
 {
   return Math.floor( (Math.random() * (max - min + 1)) ) + min ;
 }
 
-/*estrutura para ângulos*/
-class Angulo
-{
-  constructor( angulo )
-  {
-    this.angulo = (angulo > 360 || angulo < 0) ? (45) : (angulo) ;
-  }
-
-  grausParaRadianos()
-  {
-    return (this.angulo*(Math.PI/180));
-  }
-
-    definirNovoAngulo( graus )
-    {
-      this.angulo = (graus > 360 || graus < 0) ? (this.angulo) : (graus) ;
-    }
-
-    incrementarAngulo()
-    {
-      this.angulo = ((this.angulo + 1) > 360) ? (0) : (this.angulo+1) ;
-    }
-
-    decrementarAngulo()
-    {
-      this.angulo = ((this.angulo - 1) < 0) ? (360) : (this.angulo-1) ;
-    }
-
-    /** retorna uma lista com 360 números de ângulo.
-     *  inicioOutro - ângulo zero deste corresponde a angulo X daquele.
-     *  outroInvertido - outro gira em direção contraria à minha.
-     * */
-    mapearCirculoAngularParaOutroDiferente( inicioOutro=0, outroInvertido=false )
-    {
-      let mapa = [];
-      let circuloB = inicioOutro;
-
-      for( let circuloA = 0; circuloA <= 360; circuloA++ )
-      {
-        if ( circuloB > 360 ) circuloB = 0;
-        if ( circuloB < 0 ) circuloB = 360;
-
-        if ( circuloB != -1 ) mapa.push( circuloB );
-
-        if ( outroInvertido == true ) circuloB--;
-        else circuloB++;
-      }
-      while( mapa.length > 360 ) mapa.pop();
-      return mapa;
-    }
-
-
-  };
 
   /** Direcionado pela velocidade */
 class Corpo
@@ -164,12 +114,12 @@ let corpos = [];
 corpos.push( new CorpoAlternativo( 10,100,200,0,0, 10) );
 corpos.push( new Corpo( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
 
-const canvas = document.getElementById("superficie");
+const canvas = document.getElementById("anguloSuperficie");
 
 // desenha todos os objetos salvos em corpos.
 function renderizarCorpos( listaDeCorpos, contexto )
 {
-  for( i=0; i<listaDeCorpos.length; i++ )
+  for( let i=0; i<listaDeCorpos.length; i++ )
   {
     const representacao = new Path2D();
     representacao.arc(
@@ -185,7 +135,7 @@ function renderizarCorpos( listaDeCorpos, contexto )
 
 function moverCorpos( listaDeCorpos )
 {
-  for( i=0; i<listaDeCorpos.length; i++ )
+  for( let i=0; i<listaDeCorpos.length; i++ )
   {
     listaDeCorpos[i].seMover();
   }
@@ -213,5 +163,5 @@ function desenhar()
 }
 desenhar();
 
-export { Angulo };
+module.exports = { Angulo };
 
