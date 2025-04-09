@@ -1,240 +1,150 @@
 /* EXPERIMENTOS EVOLUTIVOS PARA SIMULAÇÃO GRAVITACIONAL */
 
-function radianoParaGrau( radiano )
+import RenderizadorCanvas from "./renderizadorCanvas";
+import { grauParaRadiano, radianoParaGrau } from "./funcoes-va";
+import CirculoDinamicoIdentificado from "./circuloDinamicoIdentificado";
+
+const LiteralEntradasVa = 
 {
-  return (radiano*180)/Math.PI;
-}
-
-function grauParaRadiano( grau )
-{
-  return grau*(Math.PI/180);
-}
-
-function distancia( objetoA, objetoB )
-{
-  return Math.sqrt( (objetoA.posicaoX - objetoB.posicaoX)**2 + (objetoA.posicaoY - objetoB.posicaoY)**2 );
-}
-
-//computa senoRelativo relativo a outro objeto
-function senoRelativo( objetoA, objetoB, hipotenusa=1 )
-{
-  let oposto = 0;
-
-  if ( objetoA.posicaoY > objetoB.posicaoY )
-  {
-    oposto = objetoA.posicaoY - objetoB.posicaoY;
-  }
-  else
-  {
-    oposto = objetoB.posicaoY - objetoA.posicaoY;
-  }
-  return oposto/hipotenusa;
-}
-
-function cossenoRelativo( objetoA, objetoB, hipotenusa=1  )
-{
-  let adjacente = 0;
-
-  if ( objetoA.posicaoX > objetoB.posicaoX )
-  {
-    adjacente = objetoA.posicaoX - objetoB.posicaoX;
-  }
-  else
-  {
-    adjacente = objetoB.posicaoX - objetoA.posicaoX;
-  }
-
-  return adjacente/hipotenusa;
-}
-
-//Identifica quatrante relativo
-function quadranteRelativo( objetoA, objetoB )
-{
-  if ( objetoA.posicaoX > objetoB.posicaoX && objetoA.posicaoY > objetoB.posicaoY )
-  {
-    return 4;
-  }
-  else if ( objetoA.posicaoX < objetoB.posicaoX && objetoA.posicaoY > objetoB.posicaoY )
-  {
-    return 3;
-  }
-  else if ( objetoA.posicaoX < objetoB.posicaoX && objetoA.posicaoY < objetoB.posicaoY )
-  {
-    return 2;
-  }
-  else if ( objetoA.posicaoX > objetoB.posicaoX && objetoA.posicaoY < objetoB.posicaoY   )
-  {
-    return 1;
-  }
-  return 1;
-}
-
-//possibilita obter ângulo verso e reverso.
-function anguloInverso( angulo )
-{
-  if ( angulo <= 180 )
-  {
-    return angulo+180;
-  }
-  return angulo-180;
-}
-
-//aplica correção de ângulo por quadrante relativo ! DE A PARA OBJETO B (alvo) !
-function correcao( objetoA, objetoB, d, quadrante )
-{
-  switch( quadrante )
-  {
-    case 1:
-      return radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d))));
-    case 2:
-      return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d))))-90)+90
-    case 3:
-      return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d)))))+180
-    case 4:
-      return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(objetoA,objetoB,d))))-360)
-    default:
-      return 0;
-  }
-}
-
-class Corpo
-{
-  constructor( alt, lar, px, py, vx, vy, ax, ay, m )
-  {
-    this.altura = alt;
-    this.largura = lar;
-    this.posicaoX = px;
-    this.posicaoY =  py;
-    this.velocidadeX = vx;
-    this.velocidadeY = vy;
-    this.aceleracaoX = ax;
-    this.aceleracaoY = ay;
-    this.massa = m;
-  }
-}
-
-class CorpoEsferico extends Corpo
-{
-  constructor( raio, px, py, vx, vy, ax, ay, m )
-  {
-    super( 0, 0, px, py, vx, vy, ax, ay, m );
-    this.raio = raio;
-  }
-}
-
-let corpos = [];
-corpos.push();
-
-const o = new CorpoEsferico( 5, 300, 400, 0, 0, 0, 0, 10 );
-const planeta = new CorpoEsferico( 10, 500, 500, 0, 0, 0, 0, 1000000000 );
-
-const canvas = document.getElementById("gravidadeSuperficie");
-const aceleY = document.getElementById("aceleY");
-const aceleX = document.getElementById("aceleX");
-
-//controle do quadrado por wasd
-document.addEventListener("keydown", aoBaixarDeUmaTecla, false);
-async function aoBaixarDeUmaTecla( event ) 
-{
-  let keyCode = event.which;
-
-  if (keyCode == 87) //w
-  {
-    o.aceleracaoY -= 0.01;
-  }
-  else if (keyCode == 83) //s
-  {
-    o.aceleracaoY += 0.01;
-  }
-  else if (keyCode == 68 ) //d
-  {
-    o.aceleracaoX += 0.01;
-  }
-  else if (keyCode == 65 ) //a
-  {
-    o.aceleracaoX -= 0.01;
-  }
-  else if ( keyCode == 81 ) //q
-  {
-    o.velocidadeX = 0;
-    o.velocidadeY = 0;
-    o.aceleracaoX = 0;
-    o.aceleracaoY = 0;
-  }
+  canvas:document.getElementById("gravidadeSuperficie"),
+  aceleX:document.getElementById("aceleY")             ,
+  aceleY:document.getElementById("aceleX")
 };
 
-let d, s, c;
-function desenhar()
+class renderizadorCanvasVa extends RenderizadorCanvas
 {
-  if (canvas.getContext)
+  constructor( canvasId="", literalEntradas={} )
   {
-    const ctx = canvas.getContext("2d");
-    ctx.fillStyle = "#000000";
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.fillRect( 0, 0, 1000, 1000 );
-
-    ctx.fillStyle = "#FFFFFF";
-
-    const nave = new Path2D();
-    nave.arc( o.posicaoX, o.posicaoY, o.raio, 0, 2 * Math.PI);
-    ctx.fill( nave );
-
-    const circle = new Path2D();
-    circle.arc( planeta.posicaoX, planeta.posicaoY, planeta.raio, 0, 2 * Math.PI);
-    ctx.fill( circle );
-
-    //velocidade
-    ctx.strokeStyle = "red";
-    ctx.beginPath();
-    ctx.moveTo( o.posicaoX, o.posicaoY );
-    ctx.lineTo( o.posicaoX+o.velocidadeX*8, o.posicaoY+o.velocidadeY*8 );
-    ctx.stroke();
-
-    o.posicaoX += o.velocidadeX;
-    o.posicaoY += o.velocidadeY;
-    o.velocidadeX += o.aceleracaoX;
-    o.velocidadeY += o.aceleracaoY;
-    o.aceleracaoX;
-    o.aceleracaoY;
-
-
-    let d = distancia(o,planeta);
-    let s = senoRelativo(o,planeta,d);
-    let c = cossenoRelativo(o,planeta,d);
-    let ba = correcao(o,planeta,d,quadranteRelativo(o,planeta));
-    let ab = anguloInverso(correcao(o,planeta,d,quadranteRelativo(o,planeta)));
-
-    ctx.fillText(`${JSON.stringify(o)}`,10,10);
-    ctx.fillText(`d=${d}`,10,20);
-    ctx.fillText(`rel_sen=${s}`,10,30);
-    ctx.fillText(`rel_cos=${c}`,10,40);
-    ctx.fillText(`grau_B_ate_A=${ba}`,10,50);
-    ctx.fillText(`grau_A_ate_B=${ab}`,10,60);
-
-    let aceleracaoArbitrária = 0.01;
-    if ( o.posicaoX < planeta.posicaoX )
-    {
-      aceleracaoArbitrária = 0.01;
-      o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
-      o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
-    }
-    else
-    {
-      aceleracaoArbitrária = -0.01;
-      o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
-      o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
-    }
-
-    //direção do planeta
-    ctx.strokeStyle = "blue";
-    ctx.beginPath();
-    ctx.moveTo( o.posicaoX, o.posicaoY );
-    ctx.lineTo( planeta.posicaoX, planeta.posicaoY );
-    ctx.stroke();
-    
+    super(canvasId,literalEntradas);
+    this.path2DList = [];
   }
-  window.requestAnimationFrame( desenhar );
-}
-desenhar();
+
+  iniciarAmbienteDeObjetos()
+  {
+    //representações informacionais.
+    this.objetos.push(new CirculoDinamicoIdentificado( 5, 300, 400, 0, 0, 0, 0, 10, "movel" ));
+    this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 1000000000, "fixo" ));
+    
+    // objetos renderizáveis
+    for( let i=0; i<this.objetos.length; i++ )
+    {
+      this.path2DList.push( this.construirPath2D( this.objetos[i] ) );
+    }
+
+    //tratador de eventos
+    document.addEventListener("keydown", this.aoBaixarDeUmaTecla, false);
+  }
+
+  //private
+  construirPath2D( objeto={} )
+  {
+    return new Path2D().arc( objeto.posicaoX, objeto.posicaoY, objeto.raio, 0, (2 * Math.PI)  );
+  }
+
+  desenhar()
+  {
+    if (this.canvas.getContext)
+    {
+      this.context = canvas.getContext("2d");
+      this.fundoPreto();
+
+      this.context.fillStyle = "#FFFFFF";
 
 
+      let aceleracaoArbitrária = 0.01;
+      if ( o.posicaoX < planeta.posicaoX )
+      {
+        aceleracaoArbitrária = 0.01;
+        o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
+        o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
+      }
+      else
+      {
+        aceleracaoArbitrária = -0.01;
+        o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
+        o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
+      }
+    }
+  }
+
+  // ----- superconjunto -----
+
+  renderizarCorpos()
+  {
+    if ( this.objeto.length != this.path2DList.length )
+      throw new Error("this.objetos e this.path2DList tamanhos diferentes!");
+    for ( let i=0; i<this.path2DList.length; i++ )
+    {
+      this.context.fill( this.path2DList[i] );
+      this.objetos[i].moveSe();
+      this.objetos[i].acelerar();
+    }
+  }
+
+  renderizarVetorParaAlvo( identificador="", cor="red" )
+  {
+    let referenciaObjeto = this.path2DList.filter( o =>
+    {
+      if (o.identificador == identificador) return o;
+      return undefined;
+    });
+
+    this.context.strokeStyle = cor;
+    this.context.beginPath();
+    this.context.moveTo( referenciaObjeto.posicaoX, referenciaObjeto.posicaoY );
+    this.context.lineTo( 
+      referenciaObjeto.posicaoX + referenciaObjeto.velocidadeX*8,
+      referenciaObjeto.posicaoY + referenciaObjeto.velocidadeY*8
+    );
+    this.context.stroke();
+  }
+
+  renderizarInformacoes()
+  {
+    // Strings mágicas para variar
+    let objetoMovel = this.objetos.filer( (o) => { if( o.identificador === "movel" ) return o; return undefined; });
+    let objetoEstatico = this.objetos.filer( (o) => { if( o.identificador === "fixo" ) return o; return undefined; });
+
+    if ( objetoMovel !== undefined )
+    {
+      this.context.fillText(`${JSON.stringify( objetoMovel )}`,10,10);
+      this.context.fillText(`d=${objetoMovel.distanciaParaOutro( objetoEstatico )}`,10,20);
+      this.context.fillText(`rel_sen=${ objetoMovel.senoRelativoParaOutro( objetoEstatico ) }`,10,30);
+      this.context.fillText(`rel_cos=${ objetoMovel.cossenoRelativoParaOutro( objetoEstatico ) }`,10,40);
+      this.context.fillText(`grau_B_ate_A=${ objetoMovel.correcaoDirecionalParaOutro( objetoEstatico ) }`,10,50);
+      this.context.fillText(`grau_A_ate_B=${ objetoMovel.anguloInverso(objetoMovel.correcaoDirecionalParaOutro( objetoEstatico )) }`,10,60);
+    }
+    else this.context.fillText( "objetoMovel é indefinido", 10, 10);
+  }
+
+  async aoBaixarDeUmaTecla( event ) 
+  {
+    let keyCode = event.which;
+
+    if (keyCode == 87) //w
+    {
+      o.aceleracaoY -= 0.01;
+    }
+    else if (keyCode == 83) //s
+    {
+      o.aceleracaoY += 0.01;
+    }
+    else if (keyCode == 68 ) //d
+    {
+      o.aceleracaoX += 0.01;
+    }
+    else if (keyCode == 65 ) //a
+    {
+      o.aceleracaoX -= 0.01;
+    }
+    else if ( keyCode == 81 ) //q
+    {
+      o.velocidadeX = 0;
+      o.velocidadeY = 0;
+      o.aceleracaoX = 0;
+      o.aceleracaoY = 0;
+    }
+  };
+};
+
+export { renderizadorCanvasVa, LiteralEntradasVa };

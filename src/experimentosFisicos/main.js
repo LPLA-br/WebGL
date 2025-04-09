@@ -3,6 +3,7 @@ import RenderizadorCanvas from "./renderizadorCanvas";
 
 import { RenderizadorCanvasAcc, LiteralEntradasAcc} from "./acc";
 import { RenderizadorCanvasGr, LiteralEntradasGr } from "./gr";
+import { RenderizadorCanvasVa, LiteralEntradasVa } from "./va";
 
 const SELETOR_GLOBAL = document.querySelector(".seletor_global");
 
@@ -14,7 +15,11 @@ async function mudarContexto( letraMaiusculaSeletora )
   switch( letraMaiusculaSeletora )
   {
     case 'A':
-      objetoCorrente = undefined;
+      objetoCorrente = new RenderizadorCanvasVa("#anguloSuperficie", LiteralEntradasVa );
+      objetoCorrente.iniciarAmbienteDeObjetos();
+      setInterval( ()=>{
+        objetoCorrente.desenhar();
+      }, 100);
       break;
     case 'B':
       objetoCorrente = new RenderizadorCanvasGr("#anguloSuperficie", LiteralEntradasGr );

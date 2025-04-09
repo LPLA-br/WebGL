@@ -2,7 +2,7 @@
  *MOVIMENTO DE UM CORPO PELO VALOR DE ÂNGULO */
 
 import RenderizadorCanvas from "./renderizadorCanvas";
-import Corpo from "./corpo";
+import CirculoDinamico from "./circuloDinamico";
 import CorpoAlternativo from "./corpoAlternativo";
 
 const LiteralEntradasGr =
@@ -17,7 +17,7 @@ class RenderizadorCanvasGr extends RenderizadorCanvas
   {
     //TODO: refatorar POG
     this.objetos.push(  new CorpoAlternativo( 10,100,200,0,0, 10)  );
-    this.objetos.push(  new Corpo( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
+    this.objetos.push(  new CirculoDinamico( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
   }
 
   desenhar()
