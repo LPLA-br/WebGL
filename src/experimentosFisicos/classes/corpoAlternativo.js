@@ -16,7 +16,7 @@ export default class CorpoAlternativo
 
   moverSe()
   {
-    let rad = this.angulo.grausParaRadianos(); 
+    let rad = this.angulo.grausParaRadianos();
     this.velocidadex = this.velocidade * Math.cos( rad );
     this.velocidadey = this.velocidade * Math.sin( rad );
     this.posicaoX += this.velocidadex;
@@ -24,10 +24,10 @@ export default class CorpoAlternativo
   }
 
   //TODO: refatorar
-  lerEntradasPadronizadasParaUmaInstancia( velocidadeNumberInput, direcaoSlider )
+  lerEntradasPadronizadasParaUmaInstancia( literalEntradasExterno={} )
   {
-    this.velocidade = +velocidadeNumberInput.value;
-    this.angulo.definirNovoAngulo( +direcaoSlider.value );
+    this.velocidade = Number(literalEntradasExterno.velocidade.value);
+    this.angulo.definirNovoAngulo( Number(literalEntradasExterno.angulo.value) );
   }
 
   anguloAteOutroCorpo( outroCorpo )

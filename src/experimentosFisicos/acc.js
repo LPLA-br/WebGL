@@ -2,9 +2,9 @@
  * Classe requer LiteralEntradasAcc correspondente para funcionar
  * */
 
-import CorpoVertical from "./corpoVertical";
-import RenderizadorCanvas from "./renderizadorCanvas";
-import Tempo from "./tempo";
+import CorpoVertical from "./classes/corpoVertical";
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import Tempo from "./classes/tempo";
 
 // um píxel é um cm
 // um metro equivale a 100 pixeles

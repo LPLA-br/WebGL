@@ -1,0 +1,26 @@
+MAPA DE DEPENDÊNCIAS
+
+./acc.js
+import CorpoVertical from "./classes/corpoVertical";
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import Tempo from "./classes/tempo";
+
+
+./gr.js
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import CirculoDinamico from "./classes/circuloDinamico";
+import CorpoAlternativo from "./classes/corpoAlternativo";
+
+
+./main.js
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import { RenderizadorCanvasAcc, LiteralEntradasAcc} from "./acc";
+import { RenderizadorCanvasGr, LiteralEntradasGr } from "./gr";
+import { RenderizadorCanvasVa, LiteralEntradasVa } from "./va";
+
+
+./va.js
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import CirculoDinamicoIdentificado from "./classes/circuloDinamicoIdentificado";
+
+

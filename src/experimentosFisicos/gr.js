@@ -1,15 +1,15 @@
 /*DEMONSTRA A CAPACIDADE DE ORIENTAR O
  *MOVIMENTO DE UM CORPO PELO VALOR DE ÂNGULO */
 
-import RenderizadorCanvas from "./renderizadorCanvas";
-import CirculoDinamico from "./circuloDinamico";
-import CorpoAlternativo from "./corpoAlternativo";
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import CirculoDinamico from "./classes/circuloDinamico";
+import CorpoAlternativo from "./classes/corpoAlternativo";
 
 const LiteralEntradasGr =
 {
   velocidade: document.querySelector("#velocidade"),
   angulo: document.querySelector("#angulo")
-}
+};
 
 class RenderizadorCanvasGr extends RenderizadorCanvas
 {
@@ -17,7 +17,7 @@ class RenderizadorCanvasGr extends RenderizadorCanvas
   {
     //TODO: refatorar POG
     this.objetos.push(  new CorpoAlternativo( 10,100,200,0,0, 10)  );
-    this.objetos.push(  new CirculoDinamico( 10, 200, 200, 0, 0, 0, 0, 9000000000 ) );
+    this.objetos.push(  new CirculoDinamico( 10, 200, 200, 0, 0, 0, 0, 0 ) );
   }
 
   desenhar()
@@ -32,7 +32,7 @@ class RenderizadorCanvasGr extends RenderizadorCanvas
       this.atualizarRenderizaçãoPosicionalObjetos();
 
       //TODO: refatorar POG
-      this.objetos[0].lerEntradasPadronizadasParaUmaInstancia( this.literalEntradas.velocidade, this.literalEntradas.angulo );
+      this.objetos[0].lerEntradasPadronizadasParaUmaInstancia( this.literalEntradas );
     }
   }
 

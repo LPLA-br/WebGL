@@ -1,0 +1,31 @@
+MAPA DE DEPENDÊNCIAS
+
+./angulo.js
+
+
+./circuloDinamicoIdentificado.js
+import CirculoDinamico from "./circuloDinamico";
+
+
+./circuloDinamico.js
+
+
+./corpoAlternativo.js
+import Angulo from "./angulo";
+
+
+./corpoVertical.js
+
+
+./fisica.js
+
+
+./interfaceEntrada.js
+
+
+./renderizadorCanvas.js
+
+
+./tempo.js
+
+

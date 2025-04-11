@@ -1,8 +1,7 @@
 /* EXPERIMENTOS EVOLUTIVOS PARA SIMULAÇÃO GRAVITACIONAL */
 
-import RenderizadorCanvas from "./renderizadorCanvas";
-import { grauParaRadiano, radianoParaGrau } from "./funcoes-va";
-import CirculoDinamicoIdentificado from "./circuloDinamicoIdentificado";
+import RenderizadorCanvas from "./classes/renderizadorCanvas";
+import CirculoDinamicoIdentificado from "./classes/circuloDinamicoIdentificado";
 
 const LiteralEntradasVa = 
 {
@@ -11,59 +10,34 @@ const LiteralEntradasVa =
   aceleY:document.getElementById("aceleX")
 };
 
-class renderizadorCanvasVa extends RenderizadorCanvas
+class RenderizadorCanvasVa extends RenderizadorCanvas
 {
   constructor( canvasId="", literalEntradas={} )
   {
     super(canvasId,literalEntradas);
-    this.path2DList = [];
   }
 
   iniciarAmbienteDeObjetos()
   {
-    //representações informacionais.
+    /*representações informacionais -> Fonte de strings mágicas.*/
     this.objetos.push(new CirculoDinamicoIdentificado( 5, 300, 400, 0, 0, 0, 0, 10, "movel" ));
     this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 1000000000, "fixo" ));
     
-    // objetos renderizáveis
-    for( let i=0; i<this.objetos.length; i++ )
-    {
-      this.path2DList.push( this.construirPath2D( this.objetos[i] ) );
-    }
-
     //tratador de eventos
     document.addEventListener("keydown", this.aoBaixarDeUmaTecla, false);
-  }
-
-  //private
-  construirPath2D( objeto={} )
-  {
-    return new Path2D().arc( objeto.posicaoX, objeto.posicaoY, objeto.raio, 0, (2 * Math.PI)  );
   }
 
   desenhar()
   {
     if (this.canvas.getContext)
     {
-      this.context = canvas.getContext("2d");
+      this.context = this.canvas.getContext("2d");
       this.fundoPreto();
-
       this.context.fillStyle = "#FFFFFF";
-
-
-      let aceleracaoArbitrária = 0.01;
-      if ( o.posicaoX < planeta.posicaoX )
-      {
-        aceleracaoArbitrária = 0.01;
-        o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
-        o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
-      }
-      else
-      {
-        aceleracaoArbitrária = -0.01;
-        o.aceleracaoX = aceleracaoArbitrária * cossenoRelativo(o,planeta,d);
-        o.aceleracaoY = aceleracaoArbitrária * senoRelativo(o,planeta,d);
-      }
+      this.renderizarCorpos();
+      //this.renderizarVetorParaAlvo( "movel", "red" );
+      //this.renderizarInformacoes();
+      this.atualizarRenderizaçãoPosicionalObjetos();
     }
   }
 
@@ -71,23 +45,43 @@ class renderizadorCanvasVa extends RenderizadorCanvas
 
   renderizarCorpos()
   {
-    if ( this.objeto.length != this.path2DList.length )
-      throw new Error("this.objetos e this.path2DList tamanhos diferentes!");
-    for ( let i=0; i<this.path2DList.length; i++ )
+    for( let i=0; i<this.objetos.length; i++ )
     {
-      this.context.fill( this.path2DList[i] );
-      this.objetos[i].moveSe();
+      const representacao = new Path2D();
+      representacao.arc(
+        this.objetos[i].posicaoX,
+        this.objetos[i].posicaoY,
+        this.objetos[i].raio,
+        0,
+        (2 * Math.PI)
+      );
+      this.context.fill( representacao );
+    }
+  }
+
+  atualizarRenderizaçãoPosicionalObjetos()
+  {
+    this.objetos[0].acelerarArbritariamenteParaObjeto( 0.01, this.objetos[1]);
+    for ( let i=0; i<this.objetos.length; i++ )
+    {
+      this.objetos[i].moverSe();
       this.objetos[i].acelerar();
     }
   }
 
   renderizarVetorParaAlvo( identificador="", cor="red" )
   {
-    let referenciaObjeto = this.path2DList.filter( o =>
+    let referenciaObjeto = this.objetos.filter( alvo =>
     {
-      if (o.identificador == identificador) return o;
+      if (alvo.identificador == identificador) return alvo;
       return undefined;
     });
+
+    if ( referenciaObjeto )
+    {
+      console.error( "renderizarVetorParaAlvo: filter falhou: " + referenciaObjeto );
+      return;
+    }
 
     this.context.strokeStyle = cor;
     this.context.beginPath();
@@ -101,11 +95,25 @@ class renderizadorCanvasVa extends RenderizadorCanvas
 
   renderizarInformacoes()
   {
-    // Strings mágicas para variar
-    let objetoMovel = this.objetos.filer( (o) => { if( o.identificador === "movel" ) return o; return undefined; });
-    let objetoEstatico = this.objetos.filer( (o) => { if( o.identificador === "fixo" ) return o; return undefined; });
+    // STRINGS MÁGICAS PARA VARIAR
+    let objetoMovel = this.objetos.filter( (alvoMovel) =>
+    {
+      if( alvoMovel.identificador === "movel" ) return alvoMovel;
+      return undefined;
+    });
+    let objetoEstatico = this.objetos.filter( (alvoEstatico) =>
+    {
+      if( alvoEstatico.identificador === "fixo" ) return alvoEstatico;
+      return undefined;
+    });
 
-    if ( objetoMovel !== undefined )
+    if ( objetoMovel && objetoEstatico )
+    {
+      console.error( "renderizarInformacoes: filter falhou");
+      return;
+    }
+
+    if ( objetoMovel !== undefined && objetoEstatico !== undefined )
     {
       this.context.fillText(`${JSON.stringify( objetoMovel )}`,10,10);
       this.context.fillText(`d=${objetoMovel.distanciaParaOutro( objetoEstatico )}`,10,20);
@@ -114,7 +122,7 @@ class renderizadorCanvasVa extends RenderizadorCanvas
       this.context.fillText(`grau_B_ate_A=${ objetoMovel.correcaoDirecionalParaOutro( objetoEstatico ) }`,10,50);
       this.context.fillText(`grau_A_ate_B=${ objetoMovel.anguloInverso(objetoMovel.correcaoDirecionalParaOutro( objetoEstatico )) }`,10,60);
     }
-    else this.context.fillText( "objetoMovel é indefinido", 10, 10);
+    else this.context.fillText( "ERRO: objetoMovel e ou objetoEstatico são indefinidos", 10, 10);
   }
 
   async aoBaixarDeUmaTecla( event ) 
@@ -147,4 +155,4 @@ class renderizadorCanvasVa extends RenderizadorCanvas
   };
 };
 
-export { renderizadorCanvasVa, LiteralEntradasVa };
+export { RenderizadorCanvasVa, LiteralEntradasVa };

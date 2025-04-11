@@ -18,17 +18,20 @@
 
     <header>
       <h1> HTML ÚNICO PARA EXPERIMENTOS </h1>
-      <p> Permite uso de import e export ECMASCRIPT melhorando refatoração </p>
+      <p> EXPERIMENTOS CARREGADOS DINÂMICAMENTE, UM POR VEZ </p>
       <fieldset class="seletor_global">
         <legend> Escolha o programa de experimento </legend>
 
-        <input type="radio" id="aceleracao" name="ambiente" value="A">
+        <input type="radio" id="nenhum" name="ambiente" value="Z" default>
+        <label for="nenhum"> NENHUM </label><br>
+
+        <input type="radio" id="aceleracaoSeletor" name="ambiente" value="A">
         <label for="aceleracao"> ACELERAÇÃO </label><br>
 
-        <input type="radio" id="angulo" name="ambiente" value="B">
+        <input type="radio" id="anguloSeletor" name="ambiente" value="B">
         <label for="angulo"> ÂNGULO </label><br>
 
-        <input type="radio" id="queda" name="ambiente" value="C">
+        <input type="radio" id="quedaSeletor" name="ambiente" value="C">
         <label for="queda"> QUEDA </label><br>
       </fieldset>
     </header>

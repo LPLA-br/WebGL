@@ -51,8 +51,9 @@ export default class CirculoDinamico
     return oposto/hipotenusa;
   }
 
-  cossenoRelativoParaOutro( outro)
+  cossenoRelativoParaOutro( outro )
   {
+    let hipotenusa = this.distanciaParaOutro( outro );
     let adjacente = 0;
 
     if ( this.posicaoX > outro.posicaoX )
@@ -88,7 +89,6 @@ export default class CirculoDinamico
     return 1;
   }
 
-
   correcaoDirecionalParaOutro( outro )
   {
     let quadrante = this.identificarQuadranteRelativoDoOutro( outro );
@@ -104,6 +104,22 @@ export default class CirculoDinamico
         return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(outro))))-360)
       default:
         return 0;
+    }
+  }
+
+  acelerarArbritariamenteParaObjeto( aceleracaoArbitraria=0.01, outro )
+  {
+    if ( this.posicaoX < outro.posicaoX )
+    {
+      aceleracaoArbitraria = 0.01;
+      this.aceleracaoX = aceleracaoArbitraria * this.cossenoRelativoParaOutro(outro);
+      this.aceleracaoY = aceleracaoArbitraria * this.senoRelativoParaOutro(outro);
+    }
+    else
+    {
+      aceleracaoArbitraria = -0.01;
+      this.aceleracaoX = aceleracaoArbitraria * this.cossenoRelativoParaOutro(outro);
+      this.aceleracaoY = aceleracaoArbitraria * this.senoRelativoParaOutro(outro);
     }
   }
 
