@@ -3,17 +3,19 @@ export default class Terreno
 {
 
   /** parâmetro blocoGenerico Classe derivada de Cubo */
-  constructor( largura, comprimento, altura, materialGeometrico )
+  constructor( largura, comprimento, altura, materialGeometrico, blocoGenerico )
   {
     this.terreno = [];
+
     this.largura = largura;
     this.comprimento = comprimento;
     this.altura = altura;
-    this.materialGeometrico = materialGeometrico;
 
+    this.materialGeometrico = materialGeometrico;
+    this.blocoGenerico = blocoGenerico;
   }
 
-  gerarTerreno( blocoGenerico )
+  gerarTerreno()
   {
     const taxa = 9;
     if ( this.largura >= 0 || this.comprimento >= 0 || this.altura >= 0 )
@@ -24,7 +26,7 @@ export default class Terreno
         {
           for( let z = 0; z < this.altura; z++ )
           {
-            this.terreno.push( new blocoGenerico( x, y, z, this.materialGeometrico ) );
+            this.terreno.push( new this.blocoGenerico( x, y, z, this.materialGeometrico ) );
             z += taxa;
           }
           y += taxa;
