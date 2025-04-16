@@ -68,6 +68,7 @@ export default class CirculoDinamico
     return adjacente/hipotenusa;
   }
 
+  // identifica em qual quadrante o outro objeto está
   identificarQuadranteRelativoDoOutro( outro )
   {
     if ( this.posicaoX > outro.posicaoX && this.posicaoY > outro.posicaoY )
@@ -95,17 +96,29 @@ export default class CirculoDinamico
     switch( quadrante )
     {
       case 1:
-        return radianoParaGrau(Math.asin(Math.abs(this.senoRelativo(outro))));
+        return this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))));
       case 2:
-        return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(outro))))-90)+90
+        return Math.abs(this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))))-90)+90
       case 3:
-        return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(outro)))))+180
+        return Math.abs(this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro)))))+180
       case 4:
-        return Math.abs(radianoParaGrau(Math.asin(Math.abs(senoRelativo(outro))))-360)
+        return Math.abs(this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))))-360)
       default:
         return 0;
     }
   }
+
+  /*correcaoDirecionalParaOutro( outro )
+  {
+    if ( outro.posicaoY < this.posicaoY )
+    {
+      return this.direcao( this, outro );
+    }
+    else if ( outro.posicaoY > this.posicaoY )
+    {
+      return this.direcao( this, outro ) + 180;
+    }
+  }*/
 
   acelerarArbritariamenteParaObjeto( aceleracaoArbitraria=0.01, outro )
   {
@@ -138,5 +151,18 @@ export default class CirculoDinamico
   {
     return Math.floor( (Math.random() * (max - min + 1)) ) + min ;
   }
+
+  radianoParaGrau( r )
+  {
+    return r*180/Math.PI;
+  }
+
+  //Agnóstico de objeto. SEGREGATURO ?
+  direcao( a, b )
+  {
+    return Math.atan2( b.posicaoY-a.posicaoY, b.posicaoX-a.posicaoX )
+    * 180/Math.PI;
+  }
+
 };
 

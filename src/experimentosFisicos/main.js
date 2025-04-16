@@ -23,6 +23,8 @@ async function mudarContexto( letraMaiusculaSeletora )
     case 'A':
       objetoCorrente = new RenderizadorCanvasVa("#gravidadeSuperficie", LiteralEntradasVa );
       objetoCorrente.iniciarAmbienteDeObjetos();
+      removeEventListener( "keydown", vaControlador );
+      document.addEventListener("keydown", vaControlador, false);
       clearInterval( intervalCorrente );
       intervalCorrente = setInterval( ()=>{
         objetoCorrente.desenhar();
@@ -32,6 +34,7 @@ async function mudarContexto( letraMaiusculaSeletora )
       objetoCorrente = new RenderizadorCanvasGr("#anguloSuperficie", LiteralEntradasGr );
       objetoCorrente.iniciarAmbienteDeObjetos();
       clearInterval( intervalCorrente );
+      removeEventListener( "keydown", vaControlador );
       intervalCorrente = setInterval( ()=>{
         objetoCorrente.desenhar();
       }, 1);
@@ -41,6 +44,7 @@ async function mudarContexto( letraMaiusculaSeletora )
       objetoCorrente.iniciarAmbienteDeObjetos();
       //Alternativa a window.requestAnimationFrame() não funcional
       clearInterval( intervalCorrente );
+      removeEventListener( "keydown", vaControlador );
       intervalCorrente = setInterval( ()=>{
         objetoCorrente.desenhar();
       }, 100);
@@ -63,3 +67,33 @@ SELETOR_GLOBAL.addEventListener( "change", ()=>
     }
   });
 });
+
+// SETOR DE GAMBIARRAS GLOBAIS
+function vaControlador( event ) 
+{
+  let keyCode = event.which;
+
+  if (keyCode == 87) //w
+  {
+    objetoCorrente.getObjetoControlavel().aceleracaoY -= 0.01;
+  }
+  else if (keyCode == 83) //s
+  {
+    objetoCorrente.getObjetoControlavel().aceleracaoY += 0.01;
+  }
+  else if (keyCode == 68 ) //d
+  {
+    objetoCorrente.getObjetoControlavel().aceleracaoX += 0.01;
+  }
+  else if (keyCode == 65 ) //a
+  {
+    objetoCorrente.getObjetoControlavel().aceleracaoX -= 0.01;
+  }
+  else if ( keyCode == 81 ) //q
+  {
+    objetoCorrente.getObjetoControlavel().velocidadeX = 0;
+    objetoCorrente.getObjetoControlavel().velocidadeY = 0;
+    objetoCorrente.getObjetoControlavel().aceleracaoX = 0;
+    objetoCorrente.getObjetoControlavel().aceleracaoY = 0;
+  }
+};

@@ -10,6 +10,7 @@ const LiteralEntradasVa =
   aceleY:document.getElementById("aceleX")
 };
 
+// TODO: mitigar problema das strings mágicas e dos efêmeros notáveis
 class RenderizadorCanvasVa extends RenderizadorCanvas
 {
   constructor( canvasId="", literalEntradas={} )
@@ -20,11 +21,8 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
   iniciarAmbienteDeObjetos()
   {
     /*representações informacionais -> Fonte de strings mágicas.*/
-    this.objetos.push(new CirculoDinamicoIdentificado( 5, 300, 400, 0, 0, 0, 0, 10, "movel" ));
-    this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 1000000000, "fixo" ));
-    
-    //tratador de eventos
-    document.addEventListener("keydown", this.aoBaixarDeUmaTecla, false);
+    this.objetos.push(new CirculoDinamicoIdentificado( 5, 700, 200, 0, 0, 0, 0, 10, "movel" ));
+    this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 1000, "fixo" ));
   }
 
   desenhar()
@@ -36,13 +34,14 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
       this.context.fillStyle = "#FFFFFF";
       this.renderizarCorpos();
       //this.renderizarVetorParaAlvo( "movel", "red" );
-      //this.renderizarInformacoes();
+      this.renderizarInformacoes();
       this.atualizarRenderizaçãoPosicionalObjetos();
     }
   }
 
   // ----- superconjunto -----
 
+  //private
   renderizarCorpos()
   {
     for( let i=0; i<this.objetos.length; i++ )
@@ -59,9 +58,10 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
     }
   }
 
+  //private
   atualizarRenderizaçãoPosicionalObjetos()
   {
-    this.objetos[0].acelerarArbritariamenteParaObjeto( 0.01, this.objetos[1]);
+    //this.objetos.forEach( e=>{if(e.identificador=="movel")e.acelerarArbritariamenteParaObjeto(0.008, this.objetos[1])} );
     for ( let i=0; i<this.objetos.length; i++ )
     {
       this.objetos[i].moverSe();
@@ -69,6 +69,7 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
     }
   }
 
+  //private
   renderizarVetorParaAlvo( identificador="", cor="red" )
   {
     let referenciaObjeto = this.objetos.filter( alvo =>
@@ -93,29 +94,15 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
     this.context.stroke();
   }
 
+  //private
   renderizarInformacoes()
   {
-    // STRINGS MÁGICAS PARA VARIAR
-    let objetoMovel = this.objetos.filter( (alvoMovel) =>
-    {
-      if( alvoMovel.identificador === "movel" ) return alvoMovel;
-      return undefined;
-    });
-    let objetoEstatico = this.objetos.filter( (alvoEstatico) =>
-    {
-      if( alvoEstatico.identificador === "fixo" ) return alvoEstatico;
-      return undefined;
-    });
-
-    if ( objetoMovel && objetoEstatico )
-    {
-      console.error( "renderizarInformacoes: filter falhou");
-      return;
-    }
+    let objetoMovel = this.objetos[0];
+    let objetoEstatico = this.objetos[1];
 
     if ( objetoMovel !== undefined && objetoEstatico !== undefined )
     {
-      this.context.fillText(`${JSON.stringify( objetoMovel )}`,10,10);
+      this.context.fillText(`A=${JSON.stringify( objetoMovel )}`,10,10);
       this.context.fillText(`d=${objetoMovel.distanciaParaOutro( objetoEstatico )}`,10,20);
       this.context.fillText(`rel_sen=${ objetoMovel.senoRelativoParaOutro( objetoEstatico ) }`,10,30);
       this.context.fillText(`rel_cos=${ objetoMovel.cossenoRelativoParaOutro( objetoEstatico ) }`,10,40);
@@ -125,34 +112,11 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
     else this.context.fillText( "ERRO: objetoMovel e ou objetoEstatico são indefinidos", 10, 10);
   }
 
-  async aoBaixarDeUmaTecla( event ) 
+  getObjetoControlavel()
   {
-    let keyCode = event.which;
+    return this.objetos[0];
+  }
 
-    if (keyCode == 87) //w
-    {
-      o.aceleracaoY -= 0.01;
-    }
-    else if (keyCode == 83) //s
-    {
-      o.aceleracaoY += 0.01;
-    }
-    else if (keyCode == 68 ) //d
-    {
-      o.aceleracaoX += 0.01;
-    }
-    else if (keyCode == 65 ) //a
-    {
-      o.aceleracaoX -= 0.01;
-    }
-    else if ( keyCode == 81 ) //q
-    {
-      o.velocidadeX = 0;
-      o.velocidadeY = 0;
-      o.aceleracaoX = 0;
-      o.aceleracaoY = 0;
-    }
-  };
 };
 
 export { RenderizadorCanvasVa, LiteralEntradasVa };
