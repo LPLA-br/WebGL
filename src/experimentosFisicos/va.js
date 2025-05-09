@@ -20,7 +20,7 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
 
   iniciarAmbienteDeObjetos()
   {
-    /*representações informacionais -> Fonte de strings mágicas.*/
+    /*STRINGS MÁGICAS E POSIÇÕES MÁGICAS*/
     this.objetos.push(new CirculoDinamicoIdentificado( 5, 700, 200, 0, 0, 0, 0, 10, "movel" ));
     this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 1000, "fixo" ));
   }
@@ -33,7 +33,7 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
       this.fundoPreto();
       this.context.fillStyle = "#FFFFFF";
       this.renderizarCorpos();
-      //this.renderizarVetorParaAlvo( "movel", "red" );
+      this.renderizarVetorParaAlvo( "movel", "red", 16 );
       this.renderizarInformacoes();
       this.atualizarRenderizaçãoPosicionalObjetos();
     }
@@ -70,28 +70,34 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
   }
 
   //private
-  renderizarVetorParaAlvo( identificador="", cor="red" )
+  // Renderiza vetor principal resultante
+  renderizarVetorParaAlvo( identificador="", cor="red", multiplicador=8 )
   {
-    let referenciaObjeto = this.objetos.filter( alvo =>
+    let referenciaObjeto = undefined;
+    for ( let i=0; i<this.objetos.length; i++ )
     {
-      if (alvo.identificador == identificador) return alvo;
-      return undefined;
-    });
-
-    if ( referenciaObjeto )
-    {
-      console.error( "renderizarVetorParaAlvo: filter falhou: " + referenciaObjeto );
-      return;
+      if ( this.objetos[i].identificador == identificador )
+      {
+        referenciaObjeto = this.objetos[i];
+        break;
+      }
     }
 
-    this.context.strokeStyle = cor;
-    this.context.beginPath();
-    this.context.moveTo( referenciaObjeto.posicaoX, referenciaObjeto.posicaoY );
-    this.context.lineTo( 
-      referenciaObjeto.posicaoX + referenciaObjeto.velocidadeX*8,
-      referenciaObjeto.posicaoY + referenciaObjeto.velocidadeY*8
-    );
-    this.context.stroke();
+    if ( typeof referenciaObjeto == 'object' )
+    {
+      this.context.strokeStyle = cor;
+      this.context.beginPath();
+      this.context.moveTo( referenciaObjeto.posicaoX, referenciaObjeto.posicaoY );
+      this.context.lineTo( 
+        referenciaObjeto.posicaoX + referenciaObjeto.velocidadeX*multiplicador,
+        referenciaObjeto.posicaoY + referenciaObjeto.velocidadeY*multiplicador
+      );
+      this.context.stroke();
+    }
+    else
+    {
+      console.error( "referenciaObjeto indefinido" );
+    }
   }
 
   //private
