@@ -2,12 +2,14 @@
 
 import RenderizadorCanvas from "./classes/renderizadorCanvas";
 import CirculoDinamicoIdentificado from "./classes/circuloDinamicoIdentificado";
+import { Gravidade } from "./classes/fisica";
 
 const LiteralEntradasVa = 
 {
   canvas:document.getElementById("gravidadeSuperficie"),
-  aceleX:document.getElementById("aceleY")             ,
-  aceleY:document.getElementById("aceleX")
+  aceleX:document.getElementById("aceleY"),
+  aceleY:document.getElementById("aceleX"),
+  gravit:document.getElementById("gravitSwitch")
 };
 
 // TODO: mitigar problema das strings mágicas e dos efêmeros notáveis
@@ -21,8 +23,8 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
   iniciarAmbienteDeObjetos()
   {
     /*STRINGS MÁGICAS E POSIÇÕES MÁGICAS*/
-    this.objetos.push(new CirculoDinamicoIdentificado( 5, 700, 200, 0, 0, 0, 0, 10, "movel" ));
-    this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 1000, "fixo" ));
+    this.objetos.push(new CirculoDinamicoIdentificado( 5, 700, 200, 0, 0, 0, 0, 1, "movel" ));
+    this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 2, "fixo" ));
   }
 
   desenhar()
@@ -61,7 +63,16 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
   //private
   atualizarRenderizaçãoPosicionalObjetos()
   {
-    //this.objetos.forEach( e=>{if(e.identificador=="movel")e.acelerarArbritariamenteParaObjeto(0.008, this.objetos[1])} );
+    // abaixo ativado por checkbox
+    this.objetos.forEach( objeto =>
+    {
+      if ( objeto.identificador == "movel" && this.literalEntradas.gravit.checked )
+      {
+        let aceleracao = new Gravidade(1, this.objetos[0], this.objetos[1] ).forcaGravitacionalDoisCorpos();
+        objeto.acelerarArbritariamenteParaObjeto( aceleracao, this.objetos[1]);
+      }
+    });
+
     for ( let i=0; i<this.objetos.length; i++ )
     {
       this.objetos[i].moverSe();
@@ -113,7 +124,6 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
       this.context.fillText(`rel_sen=${ objetoMovel.senoRelativoParaOutro( objetoEstatico ) }`,10,30);
       this.context.fillText(`rel_cos=${ objetoMovel.cossenoRelativoParaOutro( objetoEstatico ) }`,10,40);
       this.context.fillText(`grau_B_ate_A=${ objetoMovel.correcaoDirecionalParaOutro( objetoEstatico ) }`,10,50);
-      this.context.fillText(`grau_A_ate_B=${ objetoMovel.anguloInverso(objetoMovel.correcaoDirecionalParaOutro( objetoEstatico )) }`,10,60);
     }
     else this.context.fillText( "ERRO: objetoMovel e ou objetoEstatico são indefinidos", 10, 10);
   }

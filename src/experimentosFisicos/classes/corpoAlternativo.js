@@ -51,7 +51,7 @@ export default class CorpoAlternativo
     return Math.sqrt( ((outroCorpo.posicaoX - this.posicaoX)**2)+((outroCorpo.posicaoY - this.posicaoY)**2) );
   }
 
-  // método descartado.
+  // OBSOLETO !
   aceleracaoGravitacionalParaOutroCorpo( outroCorpo )
   {
     const mapa = this.angulo.mapearCirculoAngularParaOutroDiferente();

@@ -1,18 +1,24 @@
-/* DEFINIÇÃO MAIS SIMPLES POSSÍVEL DE UM CORPO GENERICO */
+/* DEFINIÇÃO MAIS SIMPLES POSSÍVEL DE UM CORPO GENERICO
+ * OBSERVAÇÕES: Refatorar com foco na responsabilidade única
+ * */
+import Radiano from "./radiano";
+import AleatNum from "./aleatNum";
 
-/* direção determinada por interação entre velocidades X e Y */
 export default class CirculoDinamico
 {
   constructor( raio, posicaoX, posicaoY, velocidadeX, velocidadeY, aceleracaoX, aceleracaoY, massa )
   {
+    this.AleatNum = new AleatNum();
     this.raio = raio;
-    this.posicaoX = (typeof posicaoX == 'undefined')  ? this.obterNumeroAleatorioEntre(0,500) : posicaoX ;
-    this.posicaoY =  (typeof posicaoY == 'undefined') ? this.obterNumeroAleatorioEntre(0,500) : posicaoY ;
+    this.posicaoX = (typeof posicaoX == 'undefined')  ? this.AleatNum.obterNumeroAleatorioEntre(0,500) : posicaoX ;
+    this.posicaoY =  (typeof posicaoY == 'undefined') ? this.AleatNum.obterNumeroAleatorioEntre(0,500) : posicaoY ;
     this.velocidadeX = velocidadeX;
     this.velocidadeY = velocidadeY;
     this.aceleracaoX = aceleracaoX;
     this.aceleracaoY = aceleracaoY;
     this.massa = massa;
+
+    this.radiano = new Radiano();
   }
 
   moverSe()
@@ -68,7 +74,7 @@ export default class CirculoDinamico
     return adjacente/hipotenusa;
   }
 
-  // identifica em qual quadrante o outro objeto está
+  // identifica em qual quadrante do outro objeto "this.estou"
   identificarQuadranteRelativoDoOutro( outro )
   {
     if ( this.posicaoX > outro.posicaoX && this.posicaoY > outro.posicaoY )
@@ -90,78 +96,84 @@ export default class CirculoDinamico
     return 1;
   }
 
+  // retorna direção correta para outro objeto em graus
   correcaoDirecionalParaOutro( outro )
   {
     let quadrante = this.identificarQuadranteRelativoDoOutro( outro );
     switch( quadrante )
     {
       case 1:
-        return this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))));
+        return this.radiano.radianosParaGraus(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))));
       case 2:
-        return Math.abs(this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))))-90)+90
+        return Math.abs(this.radiano.radianosParaGraus(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))))-90)+90
       case 3:
-        return Math.abs(this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro)))))+180
+        return Math.abs(this.radiano.radianosParaGraus(Math.asin(Math.abs(this.senoRelativoParaOutro(outro)))))+180
       case 4:
-        return Math.abs(this.radianoParaGrau(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))))-360)
+        return Math.abs(this.radiano.radianosParaGraus(Math.asin(Math.abs(this.senoRelativoParaOutro(outro))))-360)
       default:
         return 0;
     }
   }
 
-  /*correcaoDirecionalParaOutro( outro )
+  acelerarArbritariamenteParaObjeto( aceleracao=0.01, outro )
+  {
+    let quadranteRelativoAOutro =  this.identificarQuadranteRelativoDoOutro( outro );
+    switch( quadranteRelativoAOutro )
+    {
+      case 1:
+        this.distribuirAceleracaoPorQuadrante( aceleracao, quadranteRelativoAOutro, outro );
+        break;
+      case 2:
+        this.distribuirAceleracaoPorQuadrante( aceleracao, quadranteRelativoAOutro, outro );
+        break;
+      case 3:
+        this.distribuirAceleracaoPorQuadrante( aceleracao, quadranteRelativoAOutro, outro );
+        break;
+      case 4:
+        this.distribuirAceleracaoPorQuadrante( aceleracao, quadranteRelativoAOutro, outro );
+        break;
+    }
+  }
+
+  distribuirAceleracaoPorQuadrante( aceleracao, quadrante, outroObjeto )
+  {
+    switch( quadrante )
+    {
+      case 1:
+        this.aceleracaoX = (aceleracao*-1) * this.cossenoRelativoParaOutro( outroObjeto );
+        this.aceleracaoY = aceleracao * this.senoRelativoParaOutro( outroObjeto );
+        break;
+      case 2:
+        this.aceleracaoX = aceleracao * this.cossenoRelativoParaOutro( outroObjeto );
+        this.aceleracaoY = aceleracao * this.senoRelativoParaOutro( outroObjeto );
+        break;
+      case 3:
+        this.aceleracaoX = aceleracao * this.cossenoRelativoParaOutro( outroObjeto );
+        this.aceleracaoY = (aceleracao*-1) * this.senoRelativoParaOutro( outroObjeto );
+        break;
+      case 4:
+        this.aceleracaoX = (aceleracao*-1) * this.cossenoRelativoParaOutro( outroObjeto );
+        this.aceleracaoY = (aceleracao*-1) * this.senoRelativoParaOutro( outroObjeto );
+        break;
+    }
+  }
+
+  //Alternativa não empregada
+  correcaoDirecionalParaOutro( outro )
   {
     if ( outro.posicaoY < this.posicaoY )
     {
-      return this.direcao( this, outro );
+      return this.direcaoParaOutroObjeto( outro );
     }
     else if ( outro.posicaoY > this.posicaoY )
     {
-      return this.direcao( this, outro ) + 180;
-    }
-  }*/
-
-  acelerarArbritariamenteParaObjeto( aceleracaoArbitraria=0.01, outro )
-  {
-    if ( this.posicaoX < outro.posicaoX )
-    {
-      aceleracaoArbitraria = 0.01;
-      this.aceleracaoX = aceleracaoArbitraria * this.cossenoRelativoParaOutro(outro);
-      this.aceleracaoY = aceleracaoArbitraria * this.senoRelativoParaOutro(outro);
-    }
-    else
-    {
-      aceleracaoArbitraria = -0.01;
-      this.aceleracaoX = aceleracaoArbitraria * this.cossenoRelativoParaOutro(outro);
-      this.aceleracaoY = aceleracaoArbitraria * this.senoRelativoParaOutro(outro);
+      return this.direcaoParaOutroObjeto( outro ) + 180;
     }
   }
 
-  //TODO: SEGREGATURO
-  anguloInverso( angulo=0.0 )
+  direcaoParaOutroObjeto( outro )
   {
-    if ( angulo <= 180 )
-    {
-      return angulo+180;
-    }
-    return angulo-180;
-  }
-
-  //TODO: SEGREGATURO
-  obterNumeroAleatorioEntre( max, min )
-  {
-    return Math.floor( (Math.random() * (max - min + 1)) ) + min ;
-  }
-
-  radianoParaGrau( r )
-  {
-    return r*180/Math.PI;
-  }
-
-  //Agnóstico de objeto. SEGREGATURO ?
-  direcao( a, b )
-  {
-    return Math.atan2( b.posicaoY-a.posicaoY, b.posicaoX-a.posicaoX )
-    * 180/Math.PI;
+    return Math.atan2( outro.posicaoY - this.posicaoY, outro.posicaoX - this.posicaoX ) * 180/Math.PI;
   }
 
 };

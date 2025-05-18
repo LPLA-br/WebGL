@@ -30,6 +30,7 @@ export default class Angulo
   /** retorna uma lista com 360 números de ângulo.
    *  inicioOutro - ângulo zero deste corresponde a angulo X daquele.
    *  outroInvertido - outro gira em direção contraria à minha.
+   *  OBSOLETO e INEFICIENTE!
    * */
   mapearCirculoAngularParaOutroDiferente( inicioOutro=0, outroInvertido=false )
   {
@@ -49,5 +50,16 @@ export default class Angulo
     while( mapa.length > 360 ) mapa.pop();
     return mapa;
   }
+
+  // retorna ângulo inverso do atual
+  anguloInverso()
+  {
+    if ( this.angulo <= 180 )
+    {
+      return this.angulo + 180;
+    }
+    return this.angulo - 180;
+  }
+
 };
 

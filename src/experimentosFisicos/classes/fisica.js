@@ -5,6 +5,8 @@ class Gravidade
   constructor( ConstanteGravitacionalUniversal=1, objetoA={}, objetoB={} )
   {
     this.G = ConstanteGravitacionalUniversal;
+    this.objetoA = objetoA;
+    this.objetoB = objetoB;
   }
 
   forcaGravitacionalDoisCorpos()

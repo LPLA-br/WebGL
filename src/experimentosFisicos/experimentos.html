@@ -55,17 +55,18 @@
         <canvas id="gravidadeSuperficie" width="1000" height="1000" style="border: 1px solid black"> </canvas>
         <input type="number" value="0" id="aceleX" step="0.1"> aceleX </input>
         <input type="number" value="0" id="aceleY" step="0.1"> aceleY </input>
+        <label for="gravitSwitch"> Aplicar gravidade direcional experimental -> <label/>
+        <input type="checkbox" id="gravitSwitch" name="gravitSwitch" />
       </section>
 
       <section class="seccoes">
         <h2> QUEDA DE OBJETOS SOB GRAVIDADES DIFERENTES (PROTÓTIPO) </h2>
-        <p> antes de iniciar a simulação certifica-te de ativar a gambiarra "por segundo"  </p>
 
         <canvas id="quedaSuperficie" width="1000" height="1000" style="border: 1px solid black"> </canvas>
 
         <div>
-          <label for="aplicarAtraso"> POR SEGUNDO </label>
-          <input type="checkbox" id="atraso" checked="false" />
+          <label style="display: none" for="aplicarAtraso"> POR SEGUNDO </label>
+          <input style="display: none" type="checkbox" id="atraso" checked="false" />
         </div>
         <input id="aceleracao1" type="number" value="0" id="angulo" />
         <input id="aceleracao2" type="number" value="0" id="angulo" />
