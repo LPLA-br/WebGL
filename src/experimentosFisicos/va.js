@@ -7,8 +7,8 @@ import { Gravidade } from "./classes/fisica";
 const LiteralEntradasVa = 
 {
   canvas:document.getElementById("gravidadeSuperficie"),
-  aceleX:document.getElementById("aceleY"),
-  aceleY:document.getElementById("aceleX"),
+  velocX:document.getElementById("velocidadeY"),
+  velocY:document.getElementById("velocidadeX"),
   gravit:document.getElementById("gravitSwitch")
 };
 

@@ -96,4 +96,13 @@ function vaControlador( event )
     objetoCorrente.getObjetoControlavel().aceleracaoX = 0;
     objetoCorrente.getObjetoControlavel().aceleracaoY = 0;
   }
+  else if ( keyCode = 86 )
+  {
+    objetoCorrente.getObjetoControlavel().velocidadeX = +LiteralEntradasVa.velocX.value;
+    objetoCorrente.getObjetoControlavel().velocidadeY = +LiteralEntradasVa.velocY.value;
+  }
+  else if ( keyCode = 67 )
+  {
+    //No Operation
+  }
 };

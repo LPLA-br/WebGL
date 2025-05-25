@@ -53,10 +53,13 @@
       <section class="seccoes">
         <h2> EXPERIMENTO DE POSIÇÃO ESPACIAL, VELOCIDADE E ACELERAÇÃO </h2>
         <canvas id="gravidadeSuperficie" width="1000" height="1000" style="border: 1px solid black"> </canvas>
-        <input type="number" value="0" id="aceleX" step="0.1"> aceleX </input>
-        <input type="number" value="0" id="aceleY" step="0.1"> aceleY </input>
-        <label for="gravitSwitch"> Aplicar gravidade direcional experimental -> <label/>
+        <input type="number" value="0" id="velocidadeX" step="0.1"> velocidadeX </input>
+        <input type="number" value="0" id="velocidadeY" step="0.1"> velocidadeY </input>
+        <label for="gravitSwitch"> Aplicar gravidade direcional experimental → <label/>
         <input type="checkbox" id="gravitSwitch" name="gravitSwitch" />
+        <br/>
+        <p> Pressione "v" para aplicar instântaneamente a velocidade X e Y dos inputs no móvel </p>
+        <p> Pressione "c" para evitar re-execução por tecla pressionada (gambiarra) </p>
       </section>
 
       <section class="seccoes">
