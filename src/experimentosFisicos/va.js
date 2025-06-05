@@ -2,6 +2,7 @@
 
 import RenderizadorCanvas from "./classes/renderizadorCanvas";
 import CirculoDinamicoIdentificado from "./classes/circuloDinamicoIdentificado";
+import CirculoDinamicoIdentificadoIntegravel from "./classes/circuloDinamicoIdentificadoIntegravel";
 import { Gravidade } from "./classes/fisica";
 
 const LiteralEntradasVa = 
@@ -15,15 +16,16 @@ const LiteralEntradasVa =
 // TODO: mitigar problema das strings mágicas e dos efêmeros notáveis
 class RenderizadorCanvasVa extends RenderizadorCanvas
 {
-  constructor( canvasId="", literalEntradas={} )
+  constructor( canvasId="", literalEntradas={}, deltaTempo )
   {
     super(canvasId,literalEntradas);
+    this.deltaTempo = deltaTempo;
   }
 
   iniciarAmbienteDeObjetos()
   {
     /*STRINGS MÁGICAS E POSIÇÕES MÁGICAS*/
-    this.objetos.push(new CirculoDinamicoIdentificado( 5, 700, 200, 0, 0, 0, 0, 1, "movel" ));
+    this.objetos.push(new CirculoDinamicoIdentificadoIntegravel( 5, 700, 200, 0, 0, 0, 0, 1, "movel", this.deltaTempo));
     this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 2, "fixo" ));
   }
 

@@ -21,14 +21,15 @@ async function mudarContexto( letraMaiusculaSeletora )
       clearInterval( intervalCorrente );
       break;
     case 'A':
-      objetoCorrente = new RenderizadorCanvasVa("#gravidadeSuperficie", LiteralEntradasVa );
+      const deltaTempo = 1.0;
+      objetoCorrente = new RenderizadorCanvasVa("#gravidadeSuperficie", LiteralEntradasVa, deltaTempo );
       objetoCorrente.iniciarAmbienteDeObjetos();
       removeEventListener( "keydown", vaControlador );
       document.addEventListener("keydown", vaControlador, false);
       clearInterval( intervalCorrente );
       intervalCorrente = setInterval( ()=>{
         objetoCorrente.desenhar();
-      }, 1);
+      }, deltaTempo );
       break;
     case 'B':
       objetoCorrente = new RenderizadorCanvasGr("#anguloSuperficie", LiteralEntradasGr );
