@@ -3,6 +3,7 @@
 import RenderizadorCanvas from "./classes/renderizadorCanvas";
 import CirculoDinamicoIdentificado from "./classes/circuloDinamicoIdentificado";
 import CirculoDinamicoIdentificadoIntegravel from "./classes/circuloDinamicoIdentificadoIntegravel";
+import CirculoDinamicoIdentificadoIntegravelColisivel from "./classes/circuloDinamicoIdentificadoIntegravelColisivel";
 import { Gravidade } from "./classes/fisica";
 
 const LiteralEntradasVa = 
@@ -25,8 +26,11 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
   iniciarAmbienteDeObjetos()
   {
     /*STRINGS MÁGICAS E POSIÇÕES MÁGICAS*/
-    this.objetos.push(new CirculoDinamicoIdentificadoIntegravel( 5, 700, 200, 0, 0, 0, 0, 1, "movel", this.deltaTempo));
-    this.objetos.push(new CirculoDinamicoIdentificado( 10, 500, 500, 0, 0, 0, 0, 2, "fixo" ));
+    let c = new CirculoDinamicoIdentificadoIntegravelColisivel( 5, 700, 200, 0, 0, 0, 0, 1, "movel", this.deltaTempo)
+    c.inicializarAtributoVariavelDeColisao();
+
+    this.objetos.push(c);
+    this.objetos.push(new CirculoDinamicoIdentificado( 30, 500, 500, 0, 0, 0, 0, 2, "fixo" ));
   }
 
   desenhar()
@@ -72,6 +76,7 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
       {
         let aceleracao = new Gravidade(1, this.objetos[0], this.objetos[1] ).forcaGravitacionalDoisCorpos();
         objeto.acelerarArbritariamenteParaObjeto( aceleracao, this.objetos[1]);
+        objeto.ricochetearRepulsivamenteInelasticamente( this.objetos[1] );
       }
     });
 
@@ -125,7 +130,8 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
       this.context.fillText(`d=${objetoMovel.distanciaParaOutro( objetoEstatico )}`,10,20);
       this.context.fillText(`rel_sen=${ objetoMovel.senoRelativoParaOutro( objetoEstatico ) }`,10,30);
       this.context.fillText(`rel_cos=${ objetoMovel.cossenoRelativoParaOutro( objetoEstatico ) }`,10,40);
-      this.context.fillText(`grau_B_ate_A=${ objetoMovel.correcaoDirecionalParaOutro( objetoEstatico ) }`,10,50);
+      this.context.fillText(`grau_Móvel_ate_Estático=${ objetoMovel.corrigirEObterDirecaoPara( objetoEstatico ) }`,10,50);
+      this.context.fillText(`grau_Estático_até_móvel=${ objetoEstatico.corrigirEObterDirecaoPara( objetoMovel ) }`,10,60);
     }
     else this.context.fillText( "ERRO: objetoMovel e ou objetoEstatico são indefinidos", 10, 10);
   }

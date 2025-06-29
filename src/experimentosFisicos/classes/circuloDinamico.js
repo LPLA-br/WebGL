@@ -97,7 +97,7 @@ export default class CirculoDinamico
   }
 
   // retorna direção correta para outro objeto em graus
-  correcaoDirecionalParaOutro( outro )
+  corrigirEObterDirecaoPara( outro )
   {
     let quadrante = this.identificarQuadranteRelativoDoOutro( outro );
     switch( quadrante )
@@ -135,6 +135,7 @@ export default class CirculoDinamico
     }
   }
 
+  // corrige direcao da aceleração vetorial do móvel subordinado por quadrante relativo ao objeto subordinador.
   distribuirAceleracaoPorQuadrante( aceleracao, quadrante, outroObjeto )
   {
     switch( quadrante )
@@ -159,7 +160,7 @@ export default class CirculoDinamico
   }
 
   //Alternativa não empregada
-  correcaoDirecionalParaOutro( outro )
+  corrigirEObterDirecaoPara2( outro )
   {
     if ( outro.posicaoY < this.posicaoY )
     {
@@ -171,6 +172,7 @@ export default class CirculoDinamico
     }
   }
 
+  //Alternativa não empregada
   direcaoParaOutroObjeto( outro )
   {
     return Math.atan2( outro.posicaoY - this.posicaoY, outro.posicaoX - this.posicaoX ) * 180/Math.PI;

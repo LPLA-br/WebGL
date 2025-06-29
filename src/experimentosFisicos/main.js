@@ -96,6 +96,12 @@ function vaControlador( event )
     objetoCorrente.getObjetoControlavel().velocidadeY = 0;
     objetoCorrente.getObjetoControlavel().aceleracaoX = 0;
     objetoCorrente.getObjetoControlavel().aceleracaoY = 0;
+
+    //integração verlet
+    objetoCorrente.getObjetoControlavel().posicaoXAnterior = 0;
+    objetoCorrente.getObjetoControlavel().posicaoYAnterior = 0;
+    objetoCorrente.getObjetoControlavel().posicaoAnterior.x = 0;
+    objetoCorrente.getObjetoControlavel().posicaoAnterior.y = 0;
   }
   else if ( keyCode = 86 )
   {
