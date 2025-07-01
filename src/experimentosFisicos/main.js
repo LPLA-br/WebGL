@@ -76,19 +76,19 @@ function vaControlador( event )
 
   if (keyCode == 87) //w
   {
-    objetoCorrente.getObjetoControlavel().aceleracaoY -= 0.01;
+    objetoCorrente.getObjetoControlavel().velocidadeY -= 0.01;
   }
   else if (keyCode == 83) //s
   {
-    objetoCorrente.getObjetoControlavel().aceleracaoY += 0.01;
+    objetoCorrente.getObjetoControlavel().velocidadeY += 0.01;
   }
   else if (keyCode == 68 ) //d
   {
-    objetoCorrente.getObjetoControlavel().aceleracaoX += 0.01;
+    objetoCorrente.getObjetoControlavel().velocidadeX += 0.01;
   }
   else if (keyCode == 65 ) //a
   {
-    objetoCorrente.getObjetoControlavel().aceleracaoX -= 0.01;
+    objetoCorrente.getObjetoControlavel().velocidadeX -= 0.01;
   }
   else if ( keyCode == 81 ) //q
   {

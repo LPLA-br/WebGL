@@ -35,5 +35,15 @@ export class IrracionalCircularLimitado
       this.valor = Math.abs((this.valor - x + this.limiteSuperiorInclusivo ) % this.limiteSuperiorInclusivo);
     }
   }
+
+  definirValorInicial( valor )
+  {
+    this.valor = valor;
+  }
+
+  obterValorCorrigido()
+  {
+    return this.valor;
+  }
 }
 
