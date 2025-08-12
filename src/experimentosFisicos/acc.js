@@ -2,7 +2,8 @@
  * Classe requer LiteralEntradasAcc correspondente para funcionar
  * */
 
-import CorpoVertical from "./classes/corpoVertical";
+//import CorpoVertical from "./classes/corpoVertical";
+import CorpoVerticalIntegravel from "./classes/corpoVerticalIntegravel";
 import RenderizadorCanvas from "./classes/renderizadorCanvas";
 import Tempo from "./classes/tempo";
 
@@ -23,8 +24,8 @@ class RenderizadorCanvasAcc extends RenderizadorCanvas
 {
   iniciarAmbienteDeObjetos()
   {
-    this.adicionarObjeto(  new CorpoVertical( 10, 250, 100, 0, 0 ) );
-    this.adicionarObjeto(  new CorpoVertical( 10, 750, 100, 0, 0 )  );
+    this.adicionarObjeto(  new CorpoVerticalIntegravel( 10, 250, 100, 0, 0 ) );
+    this.adicionarObjeto(  new CorpoVerticalIntegravel( 10, 750, 100, 0, 0 )  );
 
     this.literalEntradas.iniciar.addEventListener( 'click', ()=>
     {

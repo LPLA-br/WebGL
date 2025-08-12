@@ -9,7 +9,16 @@ import { RenderizadorCanvasVa, LiteralEntradasVa } from "./va";
 const SELETOR_GLOBAL = document.querySelector(".seletor_global");
 
 let objetoCorrente = new RenderizadorCanvas( "#quedaSuperficie", {});
-let intervalCorrente = 0;
+let intervalCorrente = [];
+
+async function eliminarIntervalosListados( lista )
+{
+  for ( let i = lista.length; i >= 0; i-- )
+  {
+    clearInterval( lista[i] );
+    lista.pop();
+  }
+}
 
 async function mudarContexto( letraMaiusculaSeletora )
 {
@@ -17,8 +26,9 @@ async function mudarContexto( letraMaiusculaSeletora )
   switch( letraMaiusculaSeletora )
   {
     case 'Z':
+      eliminarIntervalosListados( intervalCorrente );
       objetoCorrente = null;
-      clearInterval( intervalCorrente );
+
       break;
     case 'A':
       const deltaTempo = 1.0;
@@ -26,30 +36,48 @@ async function mudarContexto( letraMaiusculaSeletora )
       objetoCorrente.iniciarAmbienteDeObjetos();
       removeEventListener( "keydown", vaControlador );
       document.addEventListener("keydown", vaControlador, false);
-      clearInterval( intervalCorrente );
-      intervalCorrente = setInterval( ()=>{
-        objetoCorrente.desenhar();
-      }, deltaTempo );
+
+      eliminarIntervalosListados( intervalCorrente );
+
+      intervalCorrente.push( setInterval( ()=>
+        {
+          objetoCorrente.desenhar();
+        }, deltaTempo )
+      );
       break;
+
     case 'B':
       objetoCorrente = new RenderizadorCanvasGr("#anguloSuperficie", LiteralEntradasGr );
       objetoCorrente.iniciarAmbienteDeObjetos();
-      clearInterval( intervalCorrente );
+
+      eliminarIntervalosListados( intervalCorrente );
+
       removeEventListener( "keydown", vaControlador );
-      intervalCorrente = setInterval( ()=>{
-        objetoCorrente.desenhar();
-      }, 1);
+
+      intervalCorrente.push( setInterval( ()=>
+        {
+          objetoCorrente.desenhar();
+        }, 1)
+      );
       break;
+
     case 'C':
       objetoCorrente = new RenderizadorCanvasAcc("#quedaSuperficie", LiteralEntradasAcc );
       objetoCorrente.iniciarAmbienteDeObjetos();
-      //Alternativa a window.requestAnimationFrame() não funcional
-      clearInterval( intervalCorrente );
+
+      eliminarIntervalosListados( intervalCorrente );
+
       removeEventListener( "keydown", vaControlador );
-      intervalCorrente = setInterval( ()=>{
-        objetoCorrente.desenhar();
-      }, 100);
+
+      intervalCorrente.push( setInterval( ()=>
+        {
+          //renderização
+          objetoCorrente.desenhar();
+        }, 10 )
+      );
+
       break;
+
     default:
   }
 }
@@ -108,8 +136,9 @@ function vaControlador( event )
     objetoCorrente.getObjetoControlavel().velocidadeX = +LiteralEntradasVa.velocX.value;
     objetoCorrente.getObjetoControlavel().velocidadeY = +LiteralEntradasVa.velocY.value;
   }
-  else if ( keyCode = 67 )
+  else if ( keyCode = 76 )
   {
-    //No Operation
+    console.log( "LOG" );
+    console.log( intervalCorrente );
   }
 };
