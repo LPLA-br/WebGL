@@ -76,7 +76,7 @@ class RenderizadorCanvasVa extends RenderizadorCanvas
       {
         let aceleracao = new Gravidade(1, this.objetos[0], this.objetos[1] ).forcaGravitacionalDoisCorpos();
         objeto.acelerarArbritariamenteParaObjeto( aceleracao, this.objetos[1]);
-        objeto.ricochetearRepulsivamenteInelasticamente( this.objetos[1] );
+        objeto.computarNormalDeColisao( this.objetos[1] );
       }
     });
 
