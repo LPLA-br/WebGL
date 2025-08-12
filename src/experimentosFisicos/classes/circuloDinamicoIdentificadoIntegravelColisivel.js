@@ -88,58 +88,29 @@ export default class CirculoDinamicoIdentificadoIntegravelColisivel extends Circ
     this.aceleracaoY = moduloAceleracao * Math.sin( novaDirecaoGraus * Math.PI/180 );
   }
 
-  //public
-  ricochetearRepulsivamenteInelasticamente( outro )
+  //nova abordagem
+
+  computarNormalDeColisao( outro )
   {
     this.detectarColisao( outro );
     if ( this.detecoesColisao != 1 ) return;
     console.log( this.detecoesColisao, "COLISÃO" );
 
-    let anguloAdOutrem = this.corrigirEObterDirecaoPara( outro );
-    let anguloVetorAceleracao = (180/Math.PI * this.obterAnguloDoVetorDeAceleracaoEmRadianos());
-    let grausDiferenca = 0.0;
+    let distanciaX = this.posicaoX - outro.posicaoX;
+    let distanciaY = this.posicaoY - outro.posicaoY;
+    let distancia  = this.distanciaParaOutro( outro );
 
-    if ( anguloVetorAceleracao < anguloAdOutrem )
-    {
-      //grausDiferenca = anguloAdOutrem + anguloVetorAceleracao;
-      let corretor = new IrracionalCircularLimitado();
-      corretor.definirValorInicial( anguloAdOutrem );
-      corretor.adicionar( anguloVetorAceleracao );
-      grausDiferenca = corretor.obterValorCorrigido();
-      
-      //adiciona duas vezes a diferença na inclinação do vetor de aceleracao.
-      anguloVetorAceleracao += (2*grausDiferenca);
+    // vetor unitário que vai do centro do "planeta" até centro da "nave"
+    let normalX = distanciaX / distancia;
+    let normalY = distanciaY / distancia;
 
-      //inverte
-      let inverso = new Angulo( anguloVetorAceleracao ).anguloInverso();
+    let produtoEscalar = this.velocidadeX * normalX + this.velocidadeY * normalY;
 
-      //aplicar nova direção ao vetor de aceleracao propriamente dito
-      this.atribuirNovaDirecaoParaAceleracaoVelocidadeCorrente( inverso );
-    }
-    else if ( anguloVetorAceleracao > anguloAdOutrem )
-    {
-      //grausDiferenca = anguloVetorAceleracao - anguloAdOutrem;
-      let corretor = new IrracionalCircularLimitado();
-      corretor.definirValorInicial( anguloAdOutrem );
-      corretor.subtrair( anguloVetorAceleracao );
-      grausDiferenca = corretor.obterValorCorrigido();
+    //reflexão
+    this.velocidadeX = this.velocidadeX - 2 * produtoEscalar * normalX;
+    this.velocidadeY = this.velocidadeY - 2 * produtoEscalar * normalY;
 
-      //subtrai duas vezes a diferença na inclinação do vetor de aceleracao.
-      anguloVetorAceleracao -= (2*grausDiferenca);
-
-      //inverte
-      let inverso = new Angulo( anguloVetorAceleracao ).anguloInverso();
-
-      //aplicar nova direção ao vetor de aceleracao propriamente dito
-      this.atribuirNovaDirecaoParaAceleracaoVelocidadeCorrente( inverso );
-    }
-    else if ( anguloVetorAceleracao == anguloAdOutrem )
-    {
-      this.velocidadeX = this.velocidadeX * (-1);
-      this.velocidadeY = this.velocidadeY * (-1);
-      this.aceleracaoX = this.aceleracaoX * (-1);
-      this.aceleracaoY = this.aceleracaoY * (-1);
-    }
   }
+
 }
 
